@@ -8,6 +8,9 @@ import { api } from '../services/api.js';
 import { recentRoomsService } from '../services/recentRooms.js';
 import { RoomHeader } from '../components/room/RoomHeader.js';
 import { VideoPlayer } from '../components/player/VideoPlayer.js';
+import { ScreenShareStage } from '../components/sharing/ScreenShareStage.js';
+import { ParticipantFilmstrip } from '../components/sharing/ParticipantFilmstrip.js';
+import { GoogleMeetToolbar } from '../components/sharing/GoogleMeetToolbar.js';
 import { ChatPanel } from '../components/chat/ChatPanel.js';
 import { ParticipantList } from '../components/participants/ParticipantList.js';
 import { WatchQueuePanel } from '../components/room/WatchQueuePanel.js';
@@ -15,7 +18,6 @@ import { RoomSettingsModal } from '../components/room/RoomSettingsModal.js';
 import { InviteModal } from '../components/room/InviteModal.js';
 import { MediaSelectModal } from '../components/room/MediaSelectModal.js';
 import { VideoGrid } from '../components/call/VideoGrid.js';
-import { CallToolbar } from '../components/call/CallToolbar.js';
 import { PreJoinCallModal } from '../components/call/PreJoinCallModal.js';
 import { DeviceSettingsModal } from '../components/call/DeviceSettingsModal.js';
 import { Modal } from '../components/common/Modal.js';
@@ -49,7 +51,27 @@ export const WatchRoomPage: React.FC = () => {
     isHost,
   } = useRoomStore();
 
-  const { isInCall } = useCallStore();
+  const {
+    isInCall,
+    isScreenSharing,
+    callParticipants,
+    sharingLayout,
+    activeStageView,
+    setActiveStageView,
+  } = useCallStore();
+
+  const hasActiveScreenShare =
+    isScreenSharing ||
+    Array.from(callParticipants.values()).some((p) => p.screenSharing && p.stream);
+
+  // Automatically switch stage view to Screen Share when presentation starts
+  useEffect(() => {
+    if (hasActiveScreenShare) {
+      setActiveStageView('screenshare');
+    } else {
+      setActiveStageView('media');
+    }
+  }, [hasActiveScreenShare, setActiveStageView]);
 
   const [activeTab, setActiveTab] = useState<'chat' | 'queue' | 'participants'>('chat');
   const [isInviteOpen, setIsInviteOpen] = useState(false);
@@ -267,9 +289,21 @@ export const WatchRoomPage: React.FC = () => {
 
       {/* Main Watch Room Workspace */}
       <div className="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-5 lg:p-6 flex flex-col lg:flex-row gap-5">
-        {/* Left / Main Column: Video Player Area (~68%) */}
-        <div className="w-full lg:w-[68%] flex flex-col gap-4">
-          <VideoPlayer />
+        {/* Left / Main Column: Presentation Stage & Meeting Controls */}
+        <div className={`flex flex-col gap-4 ${sharingLayout === 'side-by-side' ? 'w-full lg:w-[72%]' : 'w-full lg:w-[68%]'}`}>
+          {/* Main Stage: Screen Share (Zoom/Meet style) or Synchronized Video */}
+          {hasActiveScreenShare && activeStageView === 'screenshare' ? (
+            <ScreenShareStage onSwitchToMedia={() => setActiveStageView('media')} />
+          ) : (
+            <VideoPlayer />
+          )}
+
+          {/* Filmstrip Mode (Google Meet): horizontal row of participant cameras directly below stage */}
+          {sharingLayout === 'filmstrip' && (
+            <div className="my-1">
+              <ParticipantFilmstrip orientation="horizontal" />
+            </div>
+          )}
 
           {/* Current Media Info Card */}
           {room?.media && (
@@ -288,17 +322,35 @@ export const WatchRoomPage: React.FC = () => {
             </div>
           )}
 
-          {/* Call Toolbar (FaceTime Floating Controls) */}
-          <CallToolbar />
+          {/* Google Meet & Zoom Meeting Toolbar Dock */}
+          <GoogleMeetToolbar
+            onToggleChat={() => handleTabSwitch('chat')}
+            onToggleParticipants={() => handleTabSwitch('participants')}
+            activeSidebarTab={activeTab}
+          />
 
-          {/* Participant Grid (Always visible for real-time presence & FaceTime) */}
-          <div className="mt-2">
-            <VideoGrid />
-          </div>
+          {/* Full Grid Gallery (Tiled Mode) */}
+          {(sharingLayout === 'grid' || (!hasActiveScreenShare && sharingLayout !== 'side-by-side' && sharingLayout !== 'filmstrip')) && (
+            <div className="mt-2">
+              <VideoGrid />
+            </div>
+          )}
         </div>
 
-        {/* Right Column: Chat, Queue & Participants Panel (~32%) */}
-        <div className="w-full lg:w-[32%] flex flex-col min-h-[480px] lg:h-[calc(100vh-130px)] sticky top-20">
+        {/* Right Column: Zoom Side-by-Side Filmstrip + Chat/Queue/People */}
+        <div className={`flex flex-col min-h-[480px] lg:h-[calc(100vh-130px)] sticky top-20 ${sharingLayout === 'side-by-side' ? 'w-full lg:w-[28%]' : 'w-full lg:w-[32%]'}`}>
+          {/* Zoom Side-by-Side Vertical Filmstrip */}
+          {sharingLayout === 'side-by-side' && (
+            <div className="mb-3">
+              <div className="text-[11px] font-semibold text-[#86868B] uppercase tracking-wider mb-1.5 px-1 flex items-center justify-between">
+                <span>In Meeting</span>
+                <span className="text-[#0071E3] bg-[#E8F2FE] px-2 py-0.2 rounded-full font-mono text-[10px]">
+                  {room?.participants?.length || 1} present
+                </span>
+              </div>
+              <ParticipantFilmstrip orientation="vertical" />
+            </div>
+          )}
           {/* Apple-Style Segmented Tab Selector */}
           <div className="flex items-center gap-1 p-1 bg-[#E8E8ED] rounded-full mb-3 flex-shrink-0">
             {/* Tab 1: Live Chat */}

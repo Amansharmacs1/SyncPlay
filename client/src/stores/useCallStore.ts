@@ -19,6 +19,8 @@ interface CallStoreState {
   // View Layout
   callLayout: 'grid' | 'focus' | 'sidebar';
   focusedParticipantId: string | null;
+  activeStageView: 'media' | 'screenshare';
+  sharingLayout: 'side-by-side' | 'filmstrip' | 'grid';
 
   // Media Quality & Devices
   qualityPreset: MediaQualityPreset;
@@ -45,6 +47,8 @@ interface CallStoreState {
   setActiveSpeakerId: (id: string | null) => void;
   setCallLayout: (layout: 'grid' | 'focus' | 'sidebar') => void;
   setFocusedParticipantId: (id: string | null) => void;
+  setActiveStageView: (view: 'media' | 'screenshare') => void;
+  setSharingLayout: (layout: 'side-by-side' | 'filmstrip' | 'grid') => void;
   setQualityPreset: (preset: MediaQualityPreset) => void;
   setAvailableDevices: (devices: MediaDeviceInfoList) => void;
   setSelectedAudioInput: (id: string) => void;
@@ -72,6 +76,8 @@ export const useCallStore = create<CallStoreState>((set) => ({
 
   callLayout: 'sidebar',
   focusedParticipantId: null,
+  activeStageView: 'media',
+  sharingLayout: 'side-by-side',
 
   qualityPreset: 'balanced',
   availableDevices: { audioInputs: [], videoInputs: [], audioOutputs: [] },
@@ -94,6 +100,8 @@ export const useCallStore = create<CallStoreState>((set) => ({
   setActiveSpeakerId: (activeSpeakerId) => set({ activeSpeakerId }),
   setCallLayout: (callLayout) => set({ callLayout }),
   setFocusedParticipantId: (focusedParticipantId) => set({ focusedParticipantId }),
+  setActiveStageView: (activeStageView) => set({ activeStageView }),
+  setSharingLayout: (sharingLayout) => set({ sharingLayout }),
   setQualityPreset: (qualityPreset) => set({ qualityPreset }),
   setAvailableDevices: (availableDevices) => set({ availableDevices }),
   setSelectedAudioInput: (selectedAudioInput) => set({ selectedAudioInput }),
