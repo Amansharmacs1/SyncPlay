@@ -9,6 +9,8 @@ function sanitizeUrl(url?: string): string {
   return url.trim().replace(/\/+$/, '');
 }
 
+const DEFAULT_PROD_BACKEND = 'https://syncplay-ggbb.onrender.com';
+
 function resolveUrls(): { apiBase: string; socketUrl: string } {
   const envApiUrl = sanitizeUrl(import.meta.env.VITE_API_URL);
   const envSocketUrl = sanitizeUrl(import.meta.env.VITE_SOCKET_URL);
@@ -22,8 +24,8 @@ function resolveUrls(): { apiBase: string; socketUrl: string } {
     // Derive Socket URL from API URL by stripping trailing /api
     finalSocketUrl = envApiUrl.replace(/\/api$/, '');
   } else if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-    // Production fallback if served behind a reverse proxy or same domain
-    finalSocketUrl = window.location.origin;
+    // Zero-config production fallback pointing directly to the deployed Render backend
+    finalSocketUrl = DEFAULT_PROD_BACKEND;
   } else {
     finalSocketUrl = 'http://localhost:5000';
   }
@@ -34,7 +36,8 @@ function resolveUrls(): { apiBase: string; socketUrl: string } {
   } else if (envSocketUrl) {
     finalApiBase = `${envSocketUrl}/api`;
   } else if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-    finalApiBase = `${window.location.origin}/api`;
+    // Zero-config production fallback pointing directly to the deployed Render backend
+    finalApiBase = `${DEFAULT_PROD_BACKEND}/api`;
   } else {
     finalApiBase = 'http://localhost:5000/api';
   }
