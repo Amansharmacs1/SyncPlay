@@ -25,7 +25,7 @@ export const VideoGrid: React.FC<VideoGridProps> = ({ className = '' }) => {
     setPreJoinModalOpen,
   } = useCallStore();
 
-  const { participantId, displayName, room } = useRoomStore();
+  const { participantId, displayName, room, participants: storeParticipants } = useRoomStore();
 
   // Escape key returns to full Grid view
   useEffect(() => {
@@ -53,24 +53,35 @@ export const VideoGrid: React.FC<VideoGridProps> = ({ className = '' }) => {
     inCall: isInCall,
   };
 
-  // Harmonize all room participants (both in-call and present in room)
-  const roomParticipantsList = room?.participants || [];
-  let allParticipants: ParticipantCallState[] = [];
+  // Harmonize all room participants (ensuring every person in the room is displayed)
+  const rawList = (storeParticipants && storeParticipants.length > 0)
+    ? storeParticipants
+    : (room?.participants || []);
 
-  if (roomParticipantsList.length > 0) {
-    allParticipants = roomParticipantsList.map((rp) => {
-      if (rp.id === participantId) {
-        return localParticipant;
-      }
-      const remoteCallState = callParticipants.get(rp.id);
-      if (remoteCallState) {
-        return {
-          ...remoteCallState,
-          name: remoteCallState.name || rp.name || 'Friend',
-          inCall: true,
-        };
-      }
-      return {
+  const participantMap = new Map<string, ParticipantCallState>();
+
+  // 1. Add local participant first
+  participantMap.set(participantId, localParticipant);
+
+  // 2. Add all participants from the real-time presence list
+  rawList.forEach((rp) => {
+    if (rp.id === participantId) {
+      participantMap.set(participantId, {
+        ...localParticipant,
+        name: displayName || rp.name || 'You',
+      });
+      return;
+    }
+
+    const remoteCallState = callParticipants.get(rp.id);
+    if (remoteCallState) {
+      participantMap.set(rp.id, {
+        ...remoteCallState,
+        name: remoteCallState.name || rp.name || 'Friend',
+        inCall: true,
+      });
+    } else {
+      participantMap.set(rp.id, {
         participantId: rp.id,
         name: rp.name || 'Friend',
         stream: null,
@@ -81,16 +92,18 @@ export const VideoGrid: React.FC<VideoGridProps> = ({ className = '' }) => {
         audioLevel: 0,
         isLocal: false,
         inCall: false,
-      };
-    });
-
-    // Ensure local participant is present
-    if (!allParticipants.some((p) => p.participantId === participantId)) {
-      allParticipants.unshift(localParticipant);
+      });
     }
-  } else {
-    allParticipants = [localParticipant, ...Array.from(callParticipants.values())];
-  }
+  });
+
+  // 3. Add any remote caller active in WebRTC not yet indexed in presence
+  callParticipants.forEach((cp, cpId) => {
+    if (!participantMap.has(cpId)) {
+      participantMap.set(cpId, { ...cp, inCall: true });
+    }
+  });
+
+  const allParticipants = Array.from(participantMap.values());
 
   // Active focused participant for Solo View
   const focusedParticipant = allParticipants.find(

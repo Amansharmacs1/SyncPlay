@@ -26,7 +26,8 @@ export class ParticipantManager {
       name: string;
       isHost: boolean;
       avatarSeed?: string;
-    }
+    },
+    isSocketActive?: (socketId: string) => boolean
   ): Participant[] {
     const normRoomId = roomId.toUpperCase();
     let list = this.rooms.get(normRoomId) || [];
@@ -41,16 +42,37 @@ export class ParticipantManager {
     // Check if participant already exists in the room
     const existingIndex = list.findIndex((p) => p.id === participant.id);
 
+    let finalId = participant.id;
     if (existingIndex >= 0) {
-      // Update their socketId and keep their existing host status and joinedAt
-      list[existingIndex] = {
-        ...list[existingIndex],
-        socketId: participant.socketId,
-        name: participant.name, // update name if changed
-      };
+      const existing = list[existingIndex];
+      const isExistingActive =
+        existing.socketId !== participant.socketId &&
+        Boolean(isSocketActive && isSocketActive(existing.socketId));
+
+      if (isExistingActive) {
+        // Both sockets are actively connected at the same time (e.g. 2 tabs testing).
+        // Assign a distinct unique session ID so both participants remain visible in the room.
+        finalId = `${participant.id}_${participant.socketId.slice(0, 5)}`;
+        const newParticipant: Participant = {
+          id: finalId,
+          socketId: participant.socketId,
+          name: participant.name,
+          isHost: false, // only original tab retains host privileges
+          joinedAt: Date.now(),
+          avatarSeed: participant.avatarSeed || participant.name,
+        };
+        list.push(newParticipant);
+      } else {
+        // Legitimate reconnection of the same participant (page reload or network blip)
+        list[existingIndex] = {
+          ...list[existingIndex],
+          socketId: participant.socketId,
+          name: participant.name,
+        };
+      }
     } else {
       const newParticipant: Participant = {
-        id: participant.id,
+        id: finalId,
         socketId: participant.socketId,
         name: participant.name,
         isHost: participant.isHost,
@@ -61,7 +83,7 @@ export class ParticipantManager {
     }
 
     this.rooms.set(normRoomId, list);
-    this.socketMap.set(participant.socketId, { roomId: normRoomId, participantId: participant.id });
+    this.socketMap.set(participant.socketId, { roomId: normRoomId, participantId: finalId });
     return list;
   }
 

@@ -38,7 +38,7 @@ export class RoomService {
       passwordHash,
       visibility: params.visibility || 'public',
       isLocked: false,
-      allowParticipantControl: false,
+      allowParticipantControl: true,
       media: {
         type: 'youtube',
         url: 'https://www.youtube.com/watch?v=L_LUpnjgPso', // Creative Commons 4K cinematic nature

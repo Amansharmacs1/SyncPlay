@@ -291,12 +291,10 @@ export const WatchRoomPage: React.FC = () => {
           {/* Call Toolbar (FaceTime Floating Controls) */}
           <CallToolbar />
 
-          {/* Participant Grid (Shows when 2+ people in room or when in call) */}
-          {((room?.participants && room.participants.length >= 2) || isInCall) && (
-            <div className="mt-2">
-              <VideoGrid />
-            </div>
-          )}
+          {/* Participant Grid (Always visible for real-time presence & FaceTime) */}
+          <div className="mt-2">
+            <VideoGrid />
+          </div>
         </div>
 
         {/* Right Column: Chat, Queue & Participants Panel (~32%) */}

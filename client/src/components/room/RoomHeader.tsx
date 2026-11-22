@@ -124,8 +124,8 @@ export const RoomHeader: React.FC<RoomHeaderProps> = ({
 
         {/* Right: Actions */}
         <div className="flex items-center gap-2 sm:gap-2.5">
-          {/* Change Media Button (Host or when participant control is enabled) */}
-          {(isHost || room.allowParticipantControl) && (
+          {/* Change Media Button (Available for everyone in the room) */}
+          {room && (
             <button
               onClick={onOpenMediaSelect}
               className="apple-btn-primary px-3.5 py-1.5 text-xs font-medium flex items-center gap-1.5 cursor-pointer"

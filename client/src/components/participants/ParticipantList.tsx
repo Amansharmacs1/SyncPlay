@@ -5,9 +5,13 @@ import { Avatar } from '../common/Avatar.js';
 import { Users, Crown, UserMinus, Video, MicOff, Monitor, PhoneCall } from 'lucide-react';
 
 export const ParticipantList: React.FC = () => {
-  const { room, isHost, participantId } = useRoomStore();
+  const { room, isHost, participantId, participants: storeParticipants } = useRoomStore();
 
-  if (!room) return null;
+  const participantsList = storeParticipants && storeParticipants.length > 0
+    ? storeParticipants
+    : (room?.participants || []);
+
+  if (!room && participantsList.length === 0) return null;
 
   const handleKick = (targetId: string, name: string) => {
     if (!isHost) return;
@@ -25,13 +29,13 @@ export const ParticipantList: React.FC = () => {
           <h2 className="text-xs font-semibold tracking-tight text-[#1D1D1F]">People</h2>
         </div>
         <span className="text-[11px] font-medium text-[#0071E3] bg-[#E8F2FE] px-2.5 py-0.5 rounded-full">
-          {room.participants.length} present
+          {participantsList.length} present
         </span>
       </div>
 
       {/* Participants List */}
       <div className="flex-1 overflow-y-auto p-3 space-y-2 bg-white">
-        {room.participants.map((p) => {
+        {participantsList.map((p) => {
           const isMe = p.id === participantId;
           const joinTime = new Date(p.joinedAt).toLocaleTimeString([], {
             hour: '2-digit',

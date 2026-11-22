@@ -65,12 +65,16 @@ export function setupSocketIO(io: Server<ClientToServerEvents, ServerToClientEve
         }
 
         // Add to participant manager
-        const updatedParticipants = ParticipantManager.addParticipant(normRoomId, {
-          id: participantId,
-          socketId: socket.id,
-          name: name.trim() || 'Anonymous',
-          isHost,
-        });
+        const updatedParticipants = ParticipantManager.addParticipant(
+          normRoomId,
+          {
+            id: participantId,
+            socketId: socket.id,
+            name: name.trim() || 'Anonymous',
+            isHost,
+          },
+          (sockId) => Boolean(io.sockets.sockets.get(sockId)?.connected)
+        );
 
         // Join socket.io channel
         socket.join(normRoomId);
@@ -118,13 +122,6 @@ export function setupSocketIO(io: Server<ClientToServerEvents, ServerToClientEve
       if (!participantInfo) return;
 
       const { roomId, participant } = participantInfo;
-      const room = await RoomService.getRoom(roomId);
-      const canControl = participant.isHost || (room && room.allowParticipantControl);
-
-      if (!canControl) {
-        socket.emit('room:error', { message: 'Only the room host can change the media.' });
-        return;
-      }
 
       try {
         await RoomService.updateMedia(roomId, media);
@@ -146,16 +143,7 @@ export function setupSocketIO(io: Server<ClientToServerEvents, ServerToClientEve
       const participantInfo = ParticipantManager.getBySocketId(socket.id);
       if (!participantInfo) return;
 
-      const { roomId, participant } = participantInfo;
-      const room = await RoomService.getRoom(roomId);
-      const canControl = participant.isHost || (room && room.allowParticipantControl);
-
-      if (!canControl) {
-        const authState = await SyncEngine.getAuthoritativeState(roomId);
-        socket.emit('playback:sync', authState);
-        return;
-      }
-
+      const { roomId } = participantInfo;
       const newState = await SyncEngine.handlePlay(roomId, currentTime);
       io.to(roomId).emit('playback:state', newState);
     });
@@ -165,16 +153,7 @@ export function setupSocketIO(io: Server<ClientToServerEvents, ServerToClientEve
       const participantInfo = ParticipantManager.getBySocketId(socket.id);
       if (!participantInfo) return;
 
-      const { roomId, participant } = participantInfo;
-      const room = await RoomService.getRoom(roomId);
-      const canControl = participant.isHost || (room && room.allowParticipantControl);
-
-      if (!canControl) {
-        const authState = await SyncEngine.getAuthoritativeState(roomId);
-        socket.emit('playback:sync', authState);
-        return;
-      }
-
+      const { roomId } = participantInfo;
       const newState = await SyncEngine.handlePause(roomId, currentTime);
       io.to(roomId).emit('playback:state', newState);
     });
@@ -184,16 +163,7 @@ export function setupSocketIO(io: Server<ClientToServerEvents, ServerToClientEve
       const participantInfo = ParticipantManager.getBySocketId(socket.id);
       if (!participantInfo) return;
 
-      const { roomId, participant } = participantInfo;
-      const room = await RoomService.getRoom(roomId);
-      const canControl = participant.isHost || (room && room.allowParticipantControl);
-
-      if (!canControl) {
-        const authState = await SyncEngine.getAuthoritativeState(roomId);
-        socket.emit('playback:sync', authState);
-        return;
-      }
-
+      const { roomId } = participantInfo;
       const newState = await SyncEngine.handleSeek(roomId, currentTime);
       io.to(roomId).emit('playback:sync', newState);
     });
@@ -288,12 +258,6 @@ export function setupSocketIO(io: Server<ClientToServerEvents, ServerToClientEve
       const { roomId, participant } = participantInfo;
       const room = await RoomService.getRoom(roomId);
       if (!room) return;
-
-      const canControl = participant.isHost || room.allowParticipantControl;
-      if (!canControl) {
-        socket.emit('room:error', { message: 'Only the host can start queue playback.' });
-        return;
-      }
 
       const targetItem = room.queue.find((q) => q.id === itemId);
       if (!targetItem) return;

@@ -43,8 +43,9 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClos
         visibility,
       });
 
-      // Save session info
-      localStorage.setItem('syncplay_participant_id', res.hostId);
+      // Save session info unique to this tab
+      sessionStorage.setItem('syncplay_participant_id', res.hostId);
+      localStorage.removeItem('syncplay_participant_id');
       useRoomStore.setState({ participantId: res.hostId });
 
       addToast(`Room ${res.roomId} created successfully!`, 'success');

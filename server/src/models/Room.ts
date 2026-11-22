@@ -63,7 +63,7 @@ const RoomSchema: Schema = new Schema(
     },
     allowParticipantControl: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     media: {
       type: {

@@ -25,7 +25,7 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ url }) => {
 
   const { room, isHost } = useRoomStore();
   const videoId = extractYouTubeId(url);
-  const canControl = isHost || Boolean(room?.allowParticipantControl);
+  const canControl = true; // Video control is available for everyone in the room
 
   const [isPlayerReady, setIsPlayerReady] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);

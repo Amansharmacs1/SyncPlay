@@ -11,12 +11,14 @@ import {
 } from '../types/index.js';
 import { recentRoomsService } from '../services/recentRooms.js';
 
-// Retrieve or generate a persistent participant session id (strictly anonymous, NOT an account)
+// Retrieve or generate a persistent participant session id (strictly anonymous, unique per tab/window)
 function getOrCreateParticipantId(): string {
-  let id = localStorage.getItem('syncplay_participant_id');
+  let id = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('syncplay_participant_id') : null;
   if (!id) {
     id = 'user_' + Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
-    localStorage.setItem('syncplay_participant_id', id);
+    if (typeof sessionStorage !== 'undefined') {
+      sessionStorage.setItem('syncplay_participant_id', id);
+    }
   }
   return id;
 }
@@ -35,6 +37,7 @@ interface RoomStoreState {
 
   // Room
   room: RoomData | null;
+  participants: Participant[];
   isHost: boolean;
   queue: QueueItem[];
   isLocked: boolean;
@@ -81,19 +84,21 @@ export const useRoomStore = create<RoomStoreState>((set, get) => ({
   setErrorMessage: (msg) => set({ errorMessage: msg }),
 
   room: null,
+  participants: [],
   isHost: false,
   queue: [],
   isLocked: false,
-  allowParticipantControl: false,
+  allowParticipantControl: true,
 
   setRoom: (room) => {
     const isHost = room.hostId === get().participantId;
     set({
       room,
+      participants: room.participants || [],
       isHost,
       queue: room.queue || [],
       isLocked: !!room.isLocked,
-      allowParticipantControl: !!room.allowParticipantControl,
+      allowParticipantControl: room.allowParticipantControl !== false,
     });
 
     // Save to local recent rooms without storing account or credentials
@@ -106,10 +111,10 @@ export const useRoomStore = create<RoomStoreState>((set, get) => ({
 
   updateParticipants: (participants) => {
     const { room, participantId } = get();
-    if (!room) return;
-    const isHost = room.hostId === participantId;
+    const isHost = room ? room.hostId === participantId : get().isHost;
     set({
-      room: { ...room, participants },
+      participants,
+      room: room ? { ...room, participants } : null,
       isHost,
     });
   },

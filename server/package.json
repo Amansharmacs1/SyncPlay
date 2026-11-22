@@ -13,7 +13,8 @@
     "test:webrtc": "tsx test/webrtc-signaling.test.ts",
     "test:phase3": "tsx test/phase3-features.test.ts",
     "test:cors": "tsx test/cors.test.ts",
-    "test:all": "tsx test/sync.test.ts && tsx test/cors.test.ts && tsx test/e2e-simulation.test.ts && tsx test/webrtc-signaling.test.ts && tsx test/phase3-features.test.ts"
+    "test:multi": "tsx test/multi-participant.test.ts",
+    "test:all": "tsx test/sync.test.ts && tsx test/cors.test.ts && tsx test/multi-participant.test.ts && tsx test/e2e-simulation.test.ts && tsx test/webrtc-signaling.test.ts && tsx test/phase3-features.test.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

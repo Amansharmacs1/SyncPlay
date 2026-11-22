@@ -26,7 +26,7 @@ export const WatchQueuePanel: React.FC = () => {
   const [title, setTitle] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  const canControl = isHost || allowParticipantControl;
+  const canControl = true; // Queue playback is available for everyone in the room
 
   const handleAddSubmit = (e: React.FormEvent) => {
     e.preventDefault();

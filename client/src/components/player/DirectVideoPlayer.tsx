@@ -15,7 +15,7 @@ export const DirectVideoPlayer: React.FC<DirectVideoPlayerProps> = ({ url }) => 
   const isInternalSyncRef = useRef<boolean>(false);
 
   const { room, isHost } = useRoomStore();
-  const canControl = isHost || Boolean(room?.allowParticipantControl);
+  const canControl = true; // Video control is available for everyone in the room
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
