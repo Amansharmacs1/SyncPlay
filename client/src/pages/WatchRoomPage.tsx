@@ -291,8 +291,8 @@ export const WatchRoomPage: React.FC = () => {
           {/* Call Toolbar (FaceTime Floating Controls) */}
           <CallToolbar />
 
-          {/* Video Grid (when in call) */}
-          {isInCall && (
+          {/* Participant Grid (Shows when 2+ people in room or when in call) */}
+          {((room?.participants && room.participants.length >= 2) || isInCall) && (
             <div className="mt-2">
               <VideoGrid />
             </div>

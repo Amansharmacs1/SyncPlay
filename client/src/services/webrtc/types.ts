@@ -27,6 +27,7 @@ export interface ParticipantCallState {
   connectionQuality: ConnectionQuality;
   audioLevel: number; // 0 to 1
   isLocal: boolean;
+  inCall?: boolean;
 }
 
 export interface IceServerConfig {

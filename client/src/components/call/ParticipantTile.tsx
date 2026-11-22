@@ -86,9 +86,30 @@ export const ParticipantTile: React.FC<ParticipantTileProps> = ({
         <div className="flex flex-col items-center justify-center p-4">
           <Avatar name={participant.name} size={isFocused ? 'lg' : 'md'} className="mb-2" />
           <span className="text-xs text-slate-400 flex items-center gap-1 font-medium">
-            <VideoOff className="w-3 h-3" /> Camera off
+            {participant.inCall === false ? (
+              <span>In room</span>
+            ) : (
+              <>
+                <VideoOff className="w-3 h-3" /> Camera off
+              </>
+            )}
           </span>
         </div>
+      )}
+
+      {/* Hover "View Solo" Pill Overlay for Grid Mode */}
+      {!isFocused && onToggleFocus && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleFocus();
+          }}
+          className="opacity-0 group-hover:opacity-100 transition-all duration-200 absolute inset-0 m-auto w-max h-max px-3.5 py-1.5 rounded-full bg-black/60 hover:bg-[#0071E3] backdrop-blur-md text-white text-xs font-medium flex items-center gap-1.5 shadow-lg border border-white/20 cursor-pointer scale-95 group-hover:scale-100"
+        >
+          <Maximize2 className="w-3.5 h-3.5" />
+          <span>View Solo</span>
+        </button>
       )}
 
       {/* Top Overlay Badges */}
