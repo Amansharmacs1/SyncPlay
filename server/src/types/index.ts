@@ -27,13 +27,13 @@ export interface ParticipantMediaStatus {
 }
 
 export interface Participant {
-  id: string; // Persistent user/participant session ID
+  id: string; // Persistent user/participant session ID (NOT an account)
   socketId: string;
   name: string;
   isHost: boolean;
   joinedAt: number;
   avatarSeed: string;
-  // Phase 2 WebRTC call status
+  // WebRTC call status
   cameraEnabled?: boolean;
   microphoneEnabled?: boolean;
   screenSharing?: boolean;
@@ -49,6 +49,26 @@ export interface ChatMessage {
   message: string;
   timestamp: number;
   isSystem?: boolean;
+  reactions?: Record<string, string[]>; // emoji -> array of participant IDs
+}
+
+export interface QueueItem {
+  id: string;
+  type: MediaType;
+  url: string;
+  title: string;
+  duration?: number;
+  addedBy: string;
+  addedById: string;
+  addedAt: number;
+}
+
+export interface RoomSettings {
+  roomName: string;
+  hasPassword: boolean;
+  isLocked: boolean;
+  allowParticipantControl: boolean;
+  visibility: 'public' | 'private';
 }
 
 export interface RoomData {
@@ -56,9 +76,12 @@ export interface RoomData {
   roomName: string;
   hostId: string;
   hasPassword?: boolean;
+  isLocked?: boolean;
+  allowParticipantControl?: boolean;
   visibility: 'public' | 'private';
   media: MediaState;
   playbackState: PlaybackState;
+  queue: QueueItem[];
   participants: Participant[];
   createdAt: number;
   expiresAt?: number;
@@ -119,11 +142,27 @@ export interface ClientToServerEvents {
   'playback:pause': (payload: { currentTime: number; timestamp?: number }) => void;
   'playback:seek': (payload: { currentTime: number; timestamp?: number }) => void;
   'playback:request-sync': () => void;
+  'playback:ended': () => void;
   'chat:send': (payload: { message: string }) => void;
+  'chat:reaction': (payload: { messageId: string; emoji: string }) => void;
   'participant:kick': (payload: { participantId: string }) => void;
   'room:end': () => void;
+  'room:update-settings': (payload: {
+    roomName?: string;
+    password?: string;
+    removePassword?: boolean;
+    isLocked?: boolean;
+    allowParticipantControl?: boolean;
+    visibility?: 'public' | 'private';
+  }) => void;
 
-  // WebRTC Phase 2 Signaling
+  // Queue Events
+  'queue:add': (payload: { media: MediaState }) => void;
+  'queue:remove': (payload: { itemId: string }) => void;
+  'queue:play': (payload: { itemId: string }) => void;
+  'queue:reorder': (payload: { itemIds: string[] }) => void;
+
+  // WebRTC Signaling
   'webrtc:join': (payload: WebRtcJoinPayload) => void;
   'webrtc:leave': () => void;
   'webrtc:offer': (payload: WebRtcOfferPayload) => void;
@@ -147,9 +186,13 @@ export interface ServerToClientEvents {
   'participants:update': (participants: Participant[]) => void;
   'chat:message': (message: ChatMessage) => void;
   'chat:history': (messages: ChatMessage[]) => void;
+  'chat:reaction-updated': (payload: { messageId: string; reactions: Record<string, string[]> }) => void;
   'sync:heartbeat': (state: PlaybackState) => void;
+  'queue:update': (queue: QueueItem[]) => void;
+  'room:settings-updated': (settings: RoomSettings) => void;
+  'room:host-changed': (payload: { hostId: string }) => void;
 
-  // WebRTC Phase 2 Signaling
+  // WebRTC Signaling
   'webrtc:participant-joined': (payload: {
     participantId: string;
     name: string;

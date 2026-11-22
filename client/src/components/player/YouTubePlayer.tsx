@@ -25,6 +25,7 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ url }) => {
 
   const { room, isHost } = useRoomStore();
   const videoId = extractYouTubeId(url);
+  const canControl = isHost || Boolean(room?.allowParticipantControl);
 
   const [isPlayerReady, setIsPlayerReady] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -142,25 +143,30 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ url }) => {
       const player = playerRef.current;
       const current = player.getCurrentTime ? player.getCurrentTime() : 0;
 
-      // 1 = PLAYING, 2 = PAUSED
-      if (stateCode === window.YT.PlayerState.PLAYING) {
-        setIsPlaying(true);
+      // State codes: 0 = ENDED, 1 = PLAYING, 2 = PAUSED
+      if (stateCode === 0) { // ENDED
+        setIsPlaying(false);
         if (isHost) {
+          socketService.reportPlaybackEnded();
+        }
+      } else if (stateCode === 1) { // PLAYING
+        setIsPlaying(true);
+        if (canControl) {
           socketService.play(current);
         } else {
-          // If not host and trying to play while room is paused, re-sync back to host
+          // If not permitted and trying to play while room is paused, re-sync back to host
           if (room?.playbackState.status === 'paused') {
             isInternalSyncRef.current = true;
             player.pauseVideo();
             player.seekTo(room.playbackState.currentTime, true);
           }
         }
-      } else if (stateCode === window.YT.PlayerState.PAUSED) {
+      } else if (stateCode === 2) { // PAUSED
         setIsPlaying(false);
-        if (isHost) {
+        if (canControl) {
           socketService.pause(current);
         } else {
-          // If not host and trying to pause while room is playing, re-sync back to host
+          // If not permitted and trying to pause while room is playing, re-sync back to host
           if (room?.playbackState.status === 'playing') {
             isInternalSyncRef.current = true;
             player.playVideo();
@@ -168,7 +174,7 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ url }) => {
         }
       }
     },
-    [isHost, room?.playbackState]
+    [isHost, canControl, room?.playbackState]
   );
 
   // Apply authoritative playback state with gentle drift correction
@@ -197,14 +203,14 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ url }) => {
     if (state.status === 'playing') {
       setIsPlaying(true);
       const playerState = player.getPlayerState();
-      if (playerState !== window.YT.PlayerState.PLAYING) {
+      if (playerState !== 1) { // not PLAYING
         isInternalSyncRef.current = true;
         player.playVideo();
       }
     } else if (state.status === 'paused') {
       setIsPlaying(false);
       const playerState = player.getPlayerState();
-      if (playerState === window.YT.PlayerState.PLAYING) {
+      if (playerState === 1) { // is PLAYING
         isInternalSyncRef.current = true;
         player.pauseVideo();
       }
@@ -235,7 +241,7 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ url }) => {
 
   // Controls Handlers
   const handlePlayToggle = () => {
-    if (!isHost || !playerRef.current) return;
+    if (!canControl || !playerRef.current) return;
     const current = playerRef.current.getCurrentTime();
     if (isPlaying) {
       playerRef.current.pauseVideo();
@@ -247,7 +253,7 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ url }) => {
   };
 
   const handleSeek = (seekTime: number) => {
-    if (!isHost || !playerRef.current) return;
+    if (!canControl || !playerRef.current) return;
     isInternalSyncRef.current = true;
     playerRef.current.seekTo(seekTime, true);
     setCurrentTime(seekTime);
@@ -321,6 +327,7 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ url }) => {
         isMuted={isMuted}
         isFullscreen={isFullscreen}
         isHost={isHost}
+        allowParticipantControl={room?.allowParticipantControl}
         onPlayToggle={handlePlayToggle}
         onSeek={handleSeek}
         onVolumeChange={handleVolumeChange}

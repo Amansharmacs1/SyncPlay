@@ -66,9 +66,12 @@ export class RoomController {
           roomId: room.roomId,
           roomName: room.roomName,
           hasPassword: !!room.passwordHash,
+          isLocked: !!room.isLocked,
+          allowParticipantControl: !!room.allowParticipantControl,
           visibility: room.visibility,
           participantCount: activeParticipants.length,
           media: room.media,
+          queue: room.queue || [],
           createdAt: room.createdAt,
         },
       });

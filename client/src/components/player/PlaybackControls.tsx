@@ -19,6 +19,7 @@ interface PlaybackControlsProps {
   isMuted: boolean;
   isFullscreen: boolean;
   isHost: boolean;
+  allowParticipantControl?: boolean;
   onPlayToggle: () => void;
   onSeek: (time: number) => void;
   onVolumeChange: (vol: number) => void;
@@ -34,6 +35,7 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
   isMuted,
   isFullscreen,
   isHost,
+  allowParticipantControl = false,
   onPlayToggle,
   onSeek,
   onVolumeChange,
@@ -43,17 +45,18 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
   const [isSeekingLocal, setIsSeekingLocal] = useState(false);
   const [seekValue, setSeekValue] = useState(currentTime);
 
+  const hasControl = isHost || allowParticipantControl;
   const displayTime = isSeekingLocal ? seekValue : currentTime;
   const progressPercent = duration > 0 ? (displayTime / duration) * 100 : 0;
 
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!isHost) return;
+    if (!hasControl) return;
     setIsSeekingLocal(true);
     setSeekValue(parseFloat(e.target.value));
   };
 
   const handleSliderCommit = () => {
-    if (!isHost) return;
+    if (!hasControl) return;
     setIsSeekingLocal(false);
     onSeek(seekValue);
   };
@@ -67,13 +70,13 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
           min={0}
           max={duration || 100}
           step={0.5}
-          disabled={!isHost}
+          disabled={!hasControl}
           value={displayTime}
           onChange={handleSliderChange}
           onMouseUp={handleSliderCommit}
           onTouchEnd={handleSliderCommit}
           className={`w-full h-1.5 bg-background-elevated rounded-lg appearance-none cursor-pointer transition-all ${
-            isHost ? 'accent-accent-primary hover:h-2.5' : 'cursor-not-allowed opacity-80'
+            hasControl ? 'accent-accent-primary hover:h-2.5' : 'cursor-not-allowed opacity-80'
           }`}
           style={{
             background: `linear-gradient(to right, #8B5CF6 ${progressPercent}%, #2A2A3C ${progressPercent}%)`,
@@ -88,10 +91,10 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
           {/* Play/Pause Button */}
           <button
             onClick={onPlayToggle}
-            disabled={!isHost}
-            title={isHost ? (isPlaying ? 'Pause' : 'Play') : 'Only host can control playback'}
+            disabled={!hasControl}
+            title={hasControl ? (isPlaying ? 'Pause' : 'Play') : 'Playback control locked to host'}
             className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
-              isHost
+              hasControl
                 ? 'accent-gradient-btn text-white shadow-glow'
                 : 'bg-background-elevated text-text-dim cursor-not-allowed'
             }`}
@@ -143,6 +146,11 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
               <>
                 <Radio className="w-3.5 h-3.5 text-accent-secondary animate-pulse" />
                 <span className="text-accent-secondary hidden sm:inline">You are Host</span>
+              </>
+            ) : allowParticipantControl ? (
+              <>
+                <Radio className="w-3.5 h-3.5 text-accent-secondary" />
+                <span className="text-accent-secondary hidden sm:inline">Shared Control</span>
               </>
             ) : (
               <>

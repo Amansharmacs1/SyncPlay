@@ -1,7 +1,17 @@
 import { create } from 'zustand';
-import { RoomData, Participant, MediaState, PlaybackState, ChatMessage, ConnectionStatus } from '../types/index.js';
+import {
+  RoomData,
+  Participant,
+  MediaState,
+  PlaybackState,
+  ChatMessage,
+  ConnectionStatus,
+  QueueItem,
+  RoomSettings,
+} from '../types/index.js';
+import { recentRoomsService } from '../services/recentRooms.js';
 
-// Retrieve or generate a persistent participant session id
+// Retrieve or generate a persistent participant session id (strictly anonymous, NOT an account)
 function getOrCreateParticipantId(): string {
   let id = localStorage.getItem('syncplay_participant_id');
   if (!id) {
@@ -12,7 +22,7 @@ function getOrCreateParticipantId(): string {
 }
 
 interface RoomStoreState {
-  // Session
+  // Session (Anonymous)
   participantId: string;
   displayName: string;
   setDisplayName: (name: string) => void;
@@ -25,18 +35,27 @@ interface RoomStoreState {
 
   // Room
   room: RoomData | null;
+  isHost: boolean;
+  queue: QueueItem[];
+  isLocked: boolean;
+  allowParticipantControl: boolean;
   setRoom: (room: RoomData) => void;
   updateParticipants: (participants: Participant[]) => void;
   updateMedia: (media: MediaState) => void;
   updatePlaybackState: (state: PlaybackState) => void;
+  setQueue: (queue: QueueItem[]) => void;
+  updateRoomSettingsState: (settings: RoomSettings) => void;
 
   // Chat
   messages: ChatMessage[];
+  unreadMessageCount: number;
   addMessage: (msg: ChatMessage) => void;
   setMessages: (msgs: ChatMessage[]) => void;
+  updateMessageReaction: (messageId: string, reactions: Record<string, string[]>) => void;
+  incrementUnreadCount: () => void;
+  resetUnreadCount: () => void;
 
   // Local Player synchronization helpers
-  isHost: boolean;
   localCurrentTime: number;
   setLocalCurrentTime: (time: number) => void;
   localDuration: number;
@@ -63,9 +82,26 @@ export const useRoomStore = create<RoomStoreState>((set, get) => ({
 
   room: null,
   isHost: false,
+  queue: [],
+  isLocked: false,
+  allowParticipantControl: false,
+
   setRoom: (room) => {
     const isHost = room.hostId === get().participantId;
-    set({ room, isHost });
+    set({
+      room,
+      isHost,
+      queue: room.queue || [],
+      isLocked: !!room.isLocked,
+      allowParticipantControl: !!room.allowParticipantControl,
+    });
+
+    // Save to local recent rooms without storing account or credentials
+    recentRoomsService.saveRecentRoom({
+      roomId: room.roomId,
+      roomName: room.roomName,
+      isHost,
+    });
   },
 
   updateParticipants: (participants) => {
@@ -104,16 +140,60 @@ export const useRoomStore = create<RoomStoreState>((set, get) => ({
     });
   },
 
+  setQueue: (queue) => {
+    const { room } = get();
+    set({
+      queue,
+      room: room ? { ...room, queue } : null,
+    });
+  },
+
+  updateRoomSettingsState: (settings) => {
+    const { room } = get();
+    if (!room) return;
+    set({
+      room: {
+        ...room,
+        roomName: settings.roomName,
+        hasPassword: settings.hasPassword,
+        isLocked: settings.isLocked,
+        allowParticipantControl: settings.allowParticipantControl,
+        visibility: settings.visibility,
+      },
+      isLocked: settings.isLocked,
+      allowParticipantControl: settings.allowParticipantControl,
+    });
+
+    // Update in recent rooms
+    recentRoomsService.saveRecentRoom({
+      roomId: room.roomId,
+      roomName: settings.roomName,
+      isHost: get().isHost,
+    });
+  },
+
   messages: [],
+  unreadMessageCount: 0,
   addMessage: (msg) =>
     set((state) => {
-      // Prevent duplicate messages if re-received
       if (state.messages.some((m) => m.id === msg.id)) {
         return state;
       }
       return { messages: [...state.messages, msg] };
     }),
   setMessages: (messages) => set({ messages }),
+
+  updateMessageReaction: (messageId, reactions) =>
+    set((state) => {
+      const updatedMessages = state.messages.map((m) =>
+        m.id === messageId ? { ...m, reactions } : m
+      );
+      return { messages: updatedMessages };
+    }),
+
+  incrementUnreadCount: () =>
+    set((state) => ({ unreadMessageCount: state.unreadMessageCount + 1 })),
+  resetUnreadCount: () => set({ unreadMessageCount: 0 }),
 
   localCurrentTime: 0,
   setLocalCurrentTime: (time) => set({ localCurrentTime: time }),
@@ -126,7 +206,9 @@ export const useRoomStore = create<RoomStoreState>((set, get) => ({
     set({
       room: null,
       isHost: false,
+      queue: [],
       messages: [],
+      unreadMessageCount: 0,
       connectionStatus: 'disconnected',
       errorMessage: null,
       localCurrentTime: 0,

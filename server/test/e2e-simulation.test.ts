@@ -6,6 +6,7 @@ import { createApp } from '../src/app.js';
 import { setupSocketIO } from '../src/socket/index.js';
 import { RoomService } from '../src/services/roomService.js';
 import { connectDatabase, disconnectDatabase } from '../src/config/database.js';
+import { ParticipantManager } from '../src/socket/participantManager.js';
 import { RoomData, PlaybackState, ChatMessage } from '../src/types/index.js';
 
 async function runE2ESimulation() {
@@ -208,11 +209,13 @@ async function runE2ESimulation() {
     console.log('   ALL E2E REAL-TIME SCENARIOS PASSED WITH SUCCESS!  ');
     console.log('====================================================\n');
   } finally {
+    ParticipantManager.clearAllTimers();
     clientA.disconnect();
     clientB.disconnect();
     clientC.disconnect();
     await new Promise<void>((res) => httpServer.close(() => res()));
     await disconnectDatabase();
+    process.exit(0);
   }
 }
 

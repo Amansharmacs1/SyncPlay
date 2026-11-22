@@ -7,6 +7,7 @@ export interface IChatMessageDoc extends Document {
   message: string;
   timestamp: number;
   isSystem?: boolean;
+  reactions?: Record<string, string[]>;
 }
 
 const ChatMessageSchema: Schema = new Schema(
@@ -37,6 +38,11 @@ const ChatMessageSchema: Schema = new Schema(
     isSystem: {
       type: Boolean,
       default: false,
+    },
+    reactions: {
+      type: Map,
+      of: [String],
+      default: {},
     },
   },
   {

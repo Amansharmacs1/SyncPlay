@@ -5,17 +5,31 @@ import { useCallStore } from '../stores/useCallStore.js';
 import { socketService } from '../services/socket.js';
 import { webrtcManager } from '../services/webrtc/WebRTCManager.js';
 import { api } from '../services/api.js';
+import { recentRoomsService } from '../services/recentRooms.js';
 import { RoomHeader } from '../components/room/RoomHeader.js';
 import { VideoPlayer } from '../components/player/VideoPlayer.js';
 import { ChatPanel } from '../components/chat/ChatPanel.js';
 import { ParticipantList } from '../components/participants/ParticipantList.js';
+import { WatchQueuePanel } from '../components/room/WatchQueuePanel.js';
+import { RoomSettingsModal } from '../components/room/RoomSettingsModal.js';
 import { InviteModal } from '../components/room/InviteModal.js';
 import { MediaSelectModal } from '../components/room/MediaSelectModal.js';
 import { VideoGrid } from '../components/call/VideoGrid.js';
 import { CallToolbar } from '../components/call/CallToolbar.js';
 import { PreJoinCallModal } from '../components/call/PreJoinCallModal.js';
 import { DeviceSettingsModal } from '../components/call/DeviceSettingsModal.js';
-import { MessageSquare, Users, Loader2, AlertCircle, KeyRound, LogIn } from 'lucide-react';
+import { Modal } from '../components/common/Modal.js';
+import {
+  MessageSquare,
+  Users,
+  ListVideo,
+  Loader2,
+  AlertCircle,
+  KeyRound,
+  LogIn,
+  LogOut,
+  AlertTriangle,
+} from 'lucide-react';
 
 export const WatchRoomPage: React.FC = () => {
   const { roomId } = useParams<{ roomId: string }>();
@@ -29,14 +43,19 @@ export const WatchRoomPage: React.FC = () => {
     participantId,
     connectionStatus,
     errorMessage,
+    unreadMessageCount,
+    resetUnreadCount,
     resetRoom,
+    isHost,
   } = useRoomStore();
 
   const { isInCall } = useCallStore();
 
-  const [activeTab, setActiveTab] = useState<'chat' | 'participants'>('chat');
+  const [activeTab, setActiveTab] = useState<'chat' | 'queue' | 'participants'>('chat');
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [isMediaSelectOpen, setIsMediaSelectOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
 
   // Direct joining state (for users arriving via direct link)
   const [needsJoinInfo, setNeedsJoinInfo] = useState(false);
@@ -47,6 +66,18 @@ export const WatchRoomPage: React.FC = () => {
   const [joinError, setJoinError] = useState<string | null>(null);
 
   const normRoomId = (roomId || '').toUpperCase();
+
+  // Save room to browser local history whenever room is loaded
+  useEffect(() => {
+    if (room && room.roomId) {
+      recentRoomsService.saveRecentRoom({
+        roomId: room.roomId,
+        roomName: room.roomName,
+        joinedAt: Date.now(),
+        mediaTitle: room.media?.title,
+      });
+    }
+  }, [room?.roomId, room?.roomName, room?.media?.title]);
 
   // Step 1: Check room existence and password requirements
   useEffect(() => {
@@ -115,7 +146,14 @@ export const WatchRoomPage: React.FC = () => {
     );
   };
 
-  const handleLeaveRoom = () => {
+  const handleTabSwitch = (tab: 'chat' | 'queue' | 'participants') => {
+    setActiveTab(tab);
+    if (tab === 'chat') {
+      resetUnreadCount();
+    }
+  };
+
+  const executeLeave = () => {
     webrtcManager.leaveCall();
     socketService.leaveRoom();
     resetRoom();
@@ -223,7 +261,8 @@ export const WatchRoomPage: React.FC = () => {
       <RoomHeader
         onOpenInvite={() => setIsInviteOpen(true)}
         onOpenMediaSelect={() => setIsMediaSelectOpen(true)}
-        onLeaveRoom={handleLeaveRoom}
+        onOpenSettings={() => setIsSettingsOpen(true)}
+        onLeaveRoom={() => setIsLeaveModalOpen(true)}
       />
 
       {/* Main Watch Room Workspace */}
@@ -253,8 +292,8 @@ export const WatchRoomPage: React.FC = () => {
           <CallToolbar
             isChatOpen={activeTab === 'chat'}
             isParticipantsOpen={activeTab === 'participants'}
-            onToggleChat={() => setActiveTab('chat')}
-            onToggleParticipants={() => setActiveTab('participants')}
+            onToggleChat={() => handleTabSwitch('chat')}
+            onToggleParticipants={() => handleTabSwitch('participants')}
           />
 
           {/* Video Grid (when in call) */}
@@ -265,25 +304,50 @@ export const WatchRoomPage: React.FC = () => {
           )}
         </div>
 
-        {/* Right Column: Chat & Participants Panel (~32%) */}
-        <div className="w-full lg:w-[32%] flex flex-col min-h-[460px] lg:h-[calc(100vh-130px)] sticky top-20">
-          {/* Tab Selector */}
-          <div className="flex items-center gap-1.5 p-1 bg-background-secondary border border-surface-border rounded-xl mb-3 flex-shrink-0">
+        {/* Right Column: Chat, Queue & Participants Panel (~32%) */}
+        <div className="w-full lg:w-[32%] flex flex-col min-h-[480px] lg:h-[calc(100vh-130px)] sticky top-20">
+          {/* 3-Tab Selector */}
+          <div className="flex items-center gap-1 p-1 bg-background-secondary border border-surface-border rounded-xl mb-3 flex-shrink-0">
+            {/* Tab 1: Live Chat */}
             <button
-              onClick={() => setActiveTab('chat')}
-              className={`flex-1 py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+              onClick={() => handleTabSwitch('chat')}
+              className={`flex-1 py-2 px-1 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all relative ${
                 activeTab === 'chat'
                   ? 'bg-background-card text-white shadow-sm border border-surface-border'
                   : 'text-text-muted hover:text-white'
               }`}
             >
               <MessageSquare className="w-3.5 h-3.5 text-accent-secondary" />
-              <span>Live Chat</span>
+              <span>Chat</span>
+              {activeTab !== 'chat' && unreadMessageCount > 0 && (
+                <span className="px-1.5 py-0.2 rounded-full bg-accent-primary text-[10px] font-bold text-white animate-pulse">
+                  {unreadMessageCount > 99 ? '99+' : unreadMessageCount}
+                </span>
+              )}
             </button>
 
+            {/* Tab 2: Watch Queue */}
             <button
-              onClick={() => setActiveTab('participants')}
-              className={`flex-1 py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+              onClick={() => handleTabSwitch('queue')}
+              className={`flex-1 py-2 px-1 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
+                activeTab === 'queue'
+                  ? 'bg-background-card text-white shadow-sm border border-surface-border'
+                  : 'text-text-muted hover:text-white'
+              }`}
+            >
+              <ListVideo className="w-3.5 h-3.5 text-accent-secondary" />
+              <span>Queue</span>
+              {Boolean(room?.queue && room.queue.length > 0) && (
+                <span className="px-1.5 py-0.2 rounded-full bg-accent-primary/20 text-accent-secondary text-[10px] font-medium border border-accent-primary/30">
+                  {room!.queue.length}
+                </span>
+              )}
+            </button>
+
+            {/* Tab 3: People */}
+            <button
+              onClick={() => handleTabSwitch('participants')}
+              className={`flex-1 py-2 px-1 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
                 activeTab === 'participants'
                   ? 'bg-background-card text-white shadow-sm border border-surface-border'
                   : 'text-text-muted hover:text-white'
@@ -296,16 +360,56 @@ export const WatchRoomPage: React.FC = () => {
 
           {/* Active Tab Panel */}
           <div className="flex-1 min-h-0">
-            {activeTab === 'chat' ? <ChatPanel /> : <ParticipantList />}
+            {activeTab === 'chat' && <ChatPanel />}
+            {activeTab === 'queue' && <WatchQueuePanel />}
+            {activeTab === 'participants' && <ParticipantList />}
           </div>
         </div>
       </div>
+
+      {/* Leave Confirmation Dialog */}
+      <Modal
+        isOpen={isLeaveModalOpen}
+        onClose={() => setIsLeaveModalOpen(false)}
+        title="Leave Watch Room?"
+      >
+        <div className="space-y-4">
+          <div className="flex items-start gap-3 p-3 rounded-xl bg-status-warning/10 border border-status-warning/20 text-xs text-status-warning">
+            <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+            <span>
+              {isHost
+                ? 'You are the host. If you leave, another participant will be promoted to host, or the room will close if empty.'
+                : 'Are you sure you want to leave this watch party? You can always rejoin using your room code.'}
+            </span>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-end gap-2 pt-2">
+            <button
+              onClick={() => setIsLeaveModalOpen(false)}
+              className="w-full sm:w-auto px-4 py-2 rounded-xl bg-background-elevated hover:bg-background-hover border border-surface-border text-xs font-medium text-white transition-colors"
+            >
+              Stay in Room
+            </button>
+            <button
+              onClick={executeLeave}
+              className="w-full sm:w-auto px-4 py-2 rounded-xl bg-status-error/80 hover:bg-status-error text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Leave Room</span>
+            </button>
+          </div>
+        </div>
+      </Modal>
 
       {/* Modals */}
       <InviteModal isOpen={isInviteOpen} onClose={() => setIsInviteOpen(false)} />
       <MediaSelectModal
         isOpen={isMediaSelectOpen}
         onClose={() => setIsMediaSelectOpen(false)}
+      />
+      <RoomSettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
       />
       <PreJoinCallModal />
       <DeviceSettingsModal />

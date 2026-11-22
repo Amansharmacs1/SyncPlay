@@ -117,6 +117,19 @@ class SocketService {
     socket.on('chat:history', (messages: ChatMessage[]) => {
       useRoomStore.getState().setMessages(messages);
     });
+
+    socket.on('chat:reaction-updated', ({ messageId, reactions }) => {
+      useRoomStore.getState().updateMessageReaction(messageId, reactions);
+    });
+
+    socket.on('queue:update', (queue) => {
+      useRoomStore.getState().setQueue(queue);
+    });
+
+    socket.on('room:settings-updated', (settings) => {
+      useRoomStore.getState().updateRoomSettingsState(settings);
+      useToastStore.getState().addToast('Room settings updated', 'info');
+    });
   }
 
   public joinRoom(roomId: string, participantId: string, name: string, password?: string) {
@@ -166,6 +179,48 @@ class SocketService {
   public sendMessage(message: string) {
     if (!this.socket) return;
     this.socket.emit('chat:send', { message });
+  }
+
+  public sendChatReaction(messageId: string, emoji: string) {
+    if (!this.socket) return;
+    this.socket.emit('chat:reaction', { messageId, emoji });
+  }
+
+  public addToQueue(media: MediaState) {
+    if (!this.socket) return;
+    this.socket.emit('queue:add', { media });
+  }
+
+  public removeFromQueue(itemId: string) {
+    if (!this.socket) return;
+    this.socket.emit('queue:remove', { itemId });
+  }
+
+  public playQueueItem(itemId: string) {
+    if (!this.socket) return;
+    this.socket.emit('queue:play', { itemId });
+  }
+
+  public reorderQueue(itemIds: string[]) {
+    if (!this.socket) return;
+    this.socket.emit('queue:reorder', { itemIds });
+  }
+
+  public reportPlaybackEnded() {
+    if (!this.socket) return;
+    this.socket.emit('playback:ended');
+  }
+
+  public updateRoomSettings(settings: {
+    roomName?: string;
+    password?: string;
+    removePassword?: boolean;
+    isLocked?: boolean;
+    allowParticipantControl?: boolean;
+    visibility?: 'public' | 'private';
+  }) {
+    if (!this.socket) return;
+    this.socket.emit('room:update-settings', settings);
   }
 
   public kickParticipant(participantId: string) {

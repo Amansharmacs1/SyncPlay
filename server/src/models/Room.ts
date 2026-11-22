@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { MediaState, PlaybackState } from '../types/index.js';
+import { MediaState, PlaybackState, QueueItem } from '../types/index.js';
 
 export interface IRoomDoc extends Document {
   roomId: string;
@@ -7,11 +7,28 @@ export interface IRoomDoc extends Document {
   hostId: string;
   passwordHash?: string;
   visibility: 'public' | 'private';
+  isLocked: boolean;
+  allowParticipantControl: boolean;
   media: MediaState;
   playbackState: PlaybackState;
+  queue: QueueItem[];
   createdAt: Date;
   expiresAt: Date;
 }
+
+const QueueItemSchema = new Schema(
+  {
+    id: { type: String, required: true },
+    type: { type: String, enum: ['youtube', 'direct'], required: true },
+    url: { type: String, required: true },
+    title: { type: String, required: true },
+    duration: { type: Number, default: 0 },
+    addedBy: { type: String, required: true },
+    addedById: { type: String, required: true },
+    addedAt: { type: Number, default: () => Date.now() },
+  },
+  { _id: false }
+);
 
 const RoomSchema: Schema = new Schema(
   {
@@ -39,6 +56,14 @@ const RoomSchema: Schema = new Schema(
       type: String,
       enum: ['public', 'private'],
       default: 'public',
+    },
+    isLocked: {
+      type: Boolean,
+      default: false,
+    },
+    allowParticipantControl: {
+      type: Boolean,
+      default: false,
     },
     media: {
       type: {
@@ -78,13 +103,16 @@ const RoomSchema: Schema = new Schema(
         default: 1,
       },
     },
+    queue: {
+      type: [QueueItemSchema],
+      default: [],
+    },
     createdAt: {
       type: Date,
       default: Date.now,
     },
     expiresAt: {
       type: Date,
-      // Default expiration: 24 hours after creation
       default: () => new Date(Date.now() + 24 * 60 * 60 * 1000),
       index: { expires: '1s' }, // TTL index
     },

@@ -4,6 +4,7 @@ import { LandingPage } from './pages/LandingPage.js';
 import { WatchRoomPage } from './pages/WatchRoomPage.js';
 import { NotFoundPage } from './pages/NotFoundPage.js';
 import { ToastContainer } from './components/common/ToastContainer.js';
+import { PwaInstallPrompt } from './components/common/PwaInstallPrompt.js';
 
 export const App: React.FC = () => {
   return (
@@ -13,6 +14,7 @@ export const App: React.FC = () => {
         <Route path="/room/:roomId" element={<WatchRoomPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      <PwaInstallPrompt />
       <ToastContainer />
     </BrowserRouter>
   );

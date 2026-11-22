@@ -2,6 +2,7 @@ import assert from 'assert';
 import http from 'http';
 import { io as Client, Socket } from 'socket.io-client';
 import { Server } from 'socket.io';
+import { ParticipantManager } from '../src/socket/participantManager.js';
 import { createApp } from '../src/app.js';
 import { setupSocketIO } from '../src/socket/index.js';
 import { RoomService } from '../src/services/roomService.js';
@@ -199,10 +200,12 @@ async function runWebRtcSignalingTest() {
     console.log('    ALL WEBRTC SIGNALING TESTS PASSED SUCCESSFULLY!     ');
     console.log('========================================================\n');
   } finally {
+    ParticipantManager.clearAllTimers();
     clientA.disconnect();
     clientB.disconnect();
     await new Promise<void>((res) => httpServer.close(() => res()));
     await disconnectDatabase();
+    process.exit(0);
   }
 }
 

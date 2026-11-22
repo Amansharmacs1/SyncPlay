@@ -19,13 +19,13 @@ export interface PlaybackState {
 export type ConnectionQuality = 'excellent' | 'good' | 'poor' | 'reconnecting';
 
 export interface Participant {
-  id: string;
+  id: string; // Persistent user/participant session ID (NOT an account)
   socketId: string;
   name: string;
   isHost: boolean;
   joinedAt: number;
   avatarSeed: string;
-  // Phase 2 WebRTC call metadata
+  // WebRTC call metadata
   cameraEnabled?: boolean;
   microphoneEnabled?: boolean;
   screenSharing?: boolean;
@@ -41,6 +41,26 @@ export interface ChatMessage {
   message: string;
   timestamp: number;
   isSystem?: boolean;
+  reactions?: Record<string, string[]>; // emoji -> array of participant IDs
+}
+
+export interface QueueItem {
+  id: string;
+  type: MediaType;
+  url: string;
+  title: string;
+  duration?: number;
+  addedBy: string;
+  addedById: string;
+  addedAt: number;
+}
+
+export interface RoomSettings {
+  roomName: string;
+  hasPassword: boolean;
+  isLocked: boolean;
+  allowParticipantControl: boolean;
+  visibility: 'public' | 'private';
 }
 
 export interface RoomData {
@@ -48,9 +68,12 @@ export interface RoomData {
   roomName: string;
   hostId: string;
   hasPassword?: boolean;
+  isLocked?: boolean;
+  allowParticipantControl?: boolean;
   visibility: 'public' | 'private';
   media: MediaState;
   playbackState: PlaybackState;
+  queue: QueueItem[];
   participants: Participant[];
   createdAt: number;
 }

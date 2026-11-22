@@ -68,6 +68,7 @@ export class ChatHandler {
       message: sanitizedMessage,
       timestamp: Date.now(),
       isSystem: false,
+      reactions: {},
     };
 
     this.pushToHistory(params.roomId, chatMsg);
@@ -94,10 +95,57 @@ export class ChatHandler {
       message: this.sanitize(message),
       timestamp: Date.now(),
       isSystem: true,
+      reactions: {},
     };
 
     this.pushToHistory(roomId, chatMsg);
     return chatMsg;
+  }
+
+  /**
+   * Toggles an emoji reaction on a message for a participant.
+   */
+  public static toggleReaction(
+    roomId: string,
+    messageId: string,
+    emoji: string,
+    participantId: string
+  ): Record<string, string[]> | null {
+    const norm = roomId.toUpperCase();
+    const history = this.messageHistory.get(norm) || [];
+    const message = history.find((m) => m.id === messageId);
+    if (!message) return null;
+
+    if (!message.reactions) {
+      message.reactions = {};
+    }
+
+    const users = message.reactions[emoji] || [];
+    const index = users.indexOf(participantId);
+
+    if (index >= 0) {
+      // Remove reaction
+      users.splice(index, 1);
+      if (users.length === 0) {
+        delete message.reactions[emoji];
+      } else {
+        message.reactions[emoji] = users;
+      }
+    } else {
+      // Add reaction
+      users.push(participantId);
+      message.reactions[emoji] = users;
+    }
+
+    // Persist to DB if connected
+    if (mongoose.connection.readyState === 1) {
+      ChatMessageModel.updateOne(
+        { id: messageId },
+        { $set: { reactions: message.reactions } }
+      ).catch((err) => console.warn('[ChatHandler] Reaction update failed:', err));
+    }
+
+    return message.reactions;
   }
 
   /**
@@ -124,6 +172,7 @@ export class ChatHandler {
         message: m.message,
         timestamp: m.timestamp,
         isSystem: m.isSystem,
+        reactions: (m as any).reactions || {},
       }));
 
       this.messageHistory.set(norm, formatted);

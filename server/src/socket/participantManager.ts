@@ -137,10 +137,21 @@ export class ParticipantManager {
   /**
    * Forcibly removes a participant (e.g. host kick or explicit leave).
    */
-  public static removeParticipant(roomId: string, participantId: string): Participant[] {
+  public static removeParticipant(
+    roomId: string,
+    participantId: string
+  ): { updatedList: Participant[]; newHostId?: string } {
     const normRoomId = roomId.toUpperCase();
     const currentList = this.rooms.get(normRoomId) || [];
+    const removedParticipant = currentList.find((p) => p.id === participantId);
     const updatedList = currentList.filter((p) => p.id !== participantId);
+
+    let newHostId: string | undefined;
+    if (removedParticipant?.isHost && updatedList.length > 0) {
+      updatedList[0].isHost = true;
+      newHostId = updatedList[0].id;
+    }
+
     this.rooms.set(normRoomId, updatedList);
 
     const pendingTimer = this.disconnectTimers.get(participantId);
@@ -149,6 +160,18 @@ export class ParticipantManager {
       this.disconnectTimers.delete(participantId);
     }
 
-    return updatedList;
+    return { updatedList, newHostId };
+  }
+
+  /**
+   * Clears all pending disconnect timers (useful for test teardown).
+   */
+  public static clearAllTimers(): void {
+    for (const entry of this.disconnectTimers.values()) {
+      clearTimeout(entry.timer);
+    }
+    this.disconnectTimers.clear();
+    this.rooms.clear();
+    this.socketMap.clear();
   }
 }

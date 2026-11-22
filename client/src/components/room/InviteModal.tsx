@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal } from '../common/Modal.js';
 import { useRoomStore } from '../../stores/useRoomStore.js';
 import { useToastStore } from '../../stores/useToastStore.js';
-import { Copy, Check, Shield, Link2, Hash } from 'lucide-react';
+import { Copy, Check, Shield, Link2, Hash, Share2 } from 'lucide-react';
 
 interface InviteModalProps {
   isOpen: boolean;
@@ -31,6 +31,24 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
     setCopiedCode(true);
     addToast('Room code copied to clipboard!', 'success');
     setTimeout(() => setCopiedCode(false), 2000);
+  };
+
+  const handleNativeShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `Join ${room.roomName} on SyncPlay`,
+          text: `Hey, come watch videos together with me on SyncPlay! Room code: ${room.roomId}`,
+          url: inviteUrl,
+        });
+      } catch (err: any) {
+        if (err.name !== 'AbortError') {
+          handleCopyLink();
+        }
+      }
+    } else {
+      handleCopyLink();
+    }
   };
 
   return (
@@ -81,6 +99,17 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
               <span>{copiedCode ? 'Copied' : 'Copy Code'}</span>
             </button>
           </div>
+        </div>
+
+        {/* Native Web Share Button */}
+        <div>
+          <button
+            onClick={handleNativeShare}
+            className="w-full py-2.5 px-4 rounded-xl bg-background-elevated hover:bg-background-hover border border-surface-border text-white text-xs font-semibold flex items-center justify-center gap-2 transition-colors"
+          >
+            <Share2 className="w-4 h-4 text-accent-secondary" />
+            <span>Share via Mobile / Messaging Apps</span>
+          </button>
         </div>
 
         {room.hasPassword && (

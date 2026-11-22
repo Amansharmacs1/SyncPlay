@@ -15,17 +15,18 @@ export const DirectVideoPlayer: React.FC<DirectVideoPlayerProps> = ({ url }) => 
   const isInternalSyncRef = useRef<boolean>(false);
 
   const { room, isHost } = useRoomStore();
+  const canControl = isHost || Boolean(room?.allowParticipantControl);
 
-  const [isLoading, setIsLoading] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.8);
   const [isMuted, setIsMuted] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Apply authoritative playback state with drift correction
+  // Apply authoritative playback state
   const applyPlaybackState = useCallback((state: PlaybackState) => {
     if (!videoRef.current) return;
     const video = videoRef.current;
@@ -44,31 +45,28 @@ export const DirectVideoPlayer: React.FC<DirectVideoPlayerProps> = ({ url }) => 
       video.currentTime = targetTime;
     }
 
-    if (state.status === 'playing') {
-      setIsPlaying(true);
-      if (video.paused) {
-        isInternalSyncRef.current = true;
-        video.play().catch((err) => {
-          console.warn('[DirectVideoPlayer] Auto-play was prevented by browser:', err);
-        });
-      }
-    } else if (state.status === 'paused') {
-      setIsPlaying(false);
-      if (!video.paused) {
-        isInternalSyncRef.current = true;
-        video.pause();
-      }
+    if (state.status === 'playing' && video.paused) {
+      isInternalSyncRef.current = true;
+      video.play().catch((err) => {
+        console.warn('Autoplay with audio blocked; trying muted:', err);
+        video.muted = true;
+        setIsMuted(true);
+        video.play().catch(() => {});
+      });
+    } else if (state.status === 'paused' && !video.paused) {
+      isInternalSyncRef.current = true;
+      video.pause();
     }
   }, []);
 
   // Sync state changes from store
   useEffect(() => {
-    if (!isLoading && room?.playbackState) {
+    if (room?.playbackState && !isLoading) {
       applyPlaybackState(room.playbackState);
     }
   }, [room?.playbackState, isLoading, applyPlaybackState]);
 
-  // Video event listeners
+  // Event listeners on native video
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -76,7 +74,8 @@ export const DirectVideoPlayer: React.FC<DirectVideoPlayerProps> = ({ url }) => 
     const onLoadedMetadata = () => {
       setDuration(video.duration || 0);
       setIsLoading(false);
-      setErrorMessage(null);
+      video.volume = volume;
+
       if (room?.playbackState) {
         applyPlaybackState(room.playbackState);
       }
@@ -88,7 +87,7 @@ export const DirectVideoPlayer: React.FC<DirectVideoPlayerProps> = ({ url }) => 
         isInternalSyncRef.current = false;
         return;
       }
-      if (isHost) {
+      if (canControl) {
         socketService.play(video.currentTime);
       } else if (room?.playbackState.status === 'paused') {
         isInternalSyncRef.current = true;
@@ -102,11 +101,18 @@ export const DirectVideoPlayer: React.FC<DirectVideoPlayerProps> = ({ url }) => 
         isInternalSyncRef.current = false;
         return;
       }
-      if (isHost) {
+      if (canControl) {
         socketService.pause(video.currentTime);
       } else if (room?.playbackState.status === 'playing') {
         isInternalSyncRef.current = true;
         video.play().catch(() => {});
+      }
+    };
+
+    const onEnded = () => {
+      setIsPlaying(false);
+      if (isHost) {
+        socketService.reportPlaybackEnded();
       }
     };
 
@@ -122,6 +128,7 @@ export const DirectVideoPlayer: React.FC<DirectVideoPlayerProps> = ({ url }) => 
     video.addEventListener('loadedmetadata', onLoadedMetadata);
     video.addEventListener('play', onPlay);
     video.addEventListener('pause', onPause);
+    video.addEventListener('ended', onEnded);
     video.addEventListener('timeupdate', onTimeUpdate);
     video.addEventListener('error', onError);
 
@@ -129,14 +136,15 @@ export const DirectVideoPlayer: React.FC<DirectVideoPlayerProps> = ({ url }) => 
       video.removeEventListener('loadedmetadata', onLoadedMetadata);
       video.removeEventListener('play', onPlay);
       video.removeEventListener('pause', onPause);
+      video.removeEventListener('ended', onEnded);
       video.removeEventListener('timeupdate', onTimeUpdate);
       video.removeEventListener('error', onError);
     };
-  }, [isHost, room?.playbackState, applyPlaybackState]);
+  }, [isHost, canControl, room?.playbackState, applyPlaybackState, volume]);
 
   // Controls Handlers
   const handlePlayToggle = () => {
-    if (!isHost || !videoRef.current) return;
+    if (!canControl || !videoRef.current) return;
     const video = videoRef.current;
     if (isPlaying) {
       video.pause();
@@ -148,7 +156,7 @@ export const DirectVideoPlayer: React.FC<DirectVideoPlayerProps> = ({ url }) => 
   };
 
   const handleSeek = (seekTime: number) => {
-    if (!isHost || !videoRef.current) return;
+    if (!canControl || !videoRef.current) return;
     isInternalSyncRef.current = true;
     videoRef.current.currentTime = seekTime;
     setCurrentTime(seekTime);
@@ -168,9 +176,13 @@ export const DirectVideoPlayer: React.FC<DirectVideoPlayerProps> = ({ url }) => 
 
   const handleMuteToggle = () => {
     if (!videoRef.current) return;
-    const nextMuted = !isMuted;
-    videoRef.current.muted = nextMuted;
-    setIsMuted(nextMuted);
+    if (isMuted) {
+      videoRef.current.muted = false;
+      setIsMuted(false);
+    } else {
+      videoRef.current.muted = true;
+      setIsMuted(true);
+    }
   };
 
   const handleFullscreenToggle = () => {
@@ -192,6 +204,7 @@ export const DirectVideoPlayer: React.FC<DirectVideoPlayerProps> = ({ url }) => 
           ref={videoRef}
           src={url}
           playsInline
+          crossOrigin="anonymous"
           className="w-full h-full object-contain"
         />
 
@@ -199,7 +212,7 @@ export const DirectVideoPlayer: React.FC<DirectVideoPlayerProps> = ({ url }) => 
         {isLoading && !errorMessage && (
           <div className="absolute inset-0 bg-background-primary flex flex-col items-center justify-center gap-3">
             <Loader2 className="w-8 h-8 text-accent-secondary animate-spin" />
-            <span className="text-sm text-text-muted font-medium">Loading Direct Video Stream...</span>
+            <span className="text-sm text-text-muted font-medium">Loading Video Stream...</span>
           </div>
         )}
 
@@ -207,7 +220,7 @@ export const DirectVideoPlayer: React.FC<DirectVideoPlayerProps> = ({ url }) => 
         {errorMessage && (
           <div className="absolute inset-0 bg-background-primary/95 flex flex-col items-center justify-center p-6 text-center">
             <AlertCircle className="w-10 h-10 text-status-error mb-3" />
-            <h4 className="text-base font-semibold text-white mb-1">Stream Error</h4>
+            <h4 className="text-base font-semibold text-white mb-1">Playback Error</h4>
             <p className="text-sm text-text-muted max-w-md">{errorMessage}</p>
           </div>
         )}
@@ -222,6 +235,7 @@ export const DirectVideoPlayer: React.FC<DirectVideoPlayerProps> = ({ url }) => 
         isMuted={isMuted}
         isFullscreen={isFullscreen}
         isHost={isHost}
+        allowParticipantControl={room?.allowParticipantControl}
         onPlayToggle={handlePlayToggle}
         onSeek={handleSeek}
         onVolumeChange={handleVolumeChange}
