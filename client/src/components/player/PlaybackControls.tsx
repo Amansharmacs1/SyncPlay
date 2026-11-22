@@ -62,7 +62,7 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
   };
 
   return (
-    <div className="w-full bg-white border border-surface-border rounded-2xl p-3 sm:p-4 shadow-card">
+    <div className="w-full apple-card p-3 sm:p-4 bg-white">
       {/* Progress Bar */}
       <div className="relative mb-3 flex items-center group">
         <input
@@ -75,11 +75,11 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
           onChange={handleSliderChange}
           onMouseUp={handleSliderCommit}
           onTouchEnd={handleSliderCommit}
-          className={`w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer transition-all ${
-            hasControl ? 'accent-accent-primary hover:h-2.5' : 'cursor-not-allowed opacity-80'
+          className={`w-full h-1.5 bg-[#E5E5E7] rounded-full appearance-none cursor-pointer transition-all ${
+            hasControl ? 'accent-[#0071E3] hover:h-2' : 'cursor-not-allowed opacity-70'
           }`}
           style={{
-            background: `linear-gradient(to right, #6366F1 ${progressPercent}%, #E2E8F0 ${progressPercent}%)`,
+            background: `linear-gradient(to right, #0071E3 ${progressPercent}%, #E5E5E7 ${progressPercent}%)`,
           }}
         />
       </div>
@@ -93,10 +93,10 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
             onClick={onPlayToggle}
             disabled={!hasControl}
             title={hasControl ? (isPlaying ? 'Pause' : 'Play') : 'Playback control locked to host'}
-            className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer ${
+            className={`w-9 h-9 rounded-full flex items-center justify-center transition-all cursor-pointer ${
               hasControl
-                ? 'accent-gradient-btn text-white shadow-glow'
-                : 'bg-slate-100 text-text-dim cursor-not-allowed'
+                ? 'bg-[#0071E3] hover:bg-[#0077ED] text-white shadow-sm'
+                : 'bg-[#F5F5F7] text-[#86868B] cursor-not-allowed'
             }`}
           >
             {isPlaying ? (
@@ -110,11 +110,11 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={onMuteToggle}
-              className="p-1 text-text-muted hover:text-text-main transition-colors cursor-pointer"
+              className="p-1 text-[#86868B] hover:text-[#1D1D1F] transition-colors cursor-pointer"
               title={isMuted ? 'Unmute' : 'Mute'}
             >
               {isMuted || volume === 0 ? (
-                <VolumeX className="w-4 h-4 text-status-error" />
+                <VolumeX className="w-4 h-4 text-[#FF3B30]" />
               ) : (
                 <Volume2 className="w-4 h-4" />
               )}
@@ -126,36 +126,36 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
               step={0.05}
               value={isMuted ? 0 : volume}
               onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
-              className="hidden sm:block w-16 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-accent-primary"
+              className="hidden sm:block w-16 h-1 bg-[#E5E5E7] rounded-full appearance-none cursor-pointer accent-[#0071E3]"
             />
           </div>
 
           {/* Time Display */}
-          <div className="text-xs font-mono text-text-muted">
-            <span className="text-text-main font-semibold">{formatTime(displayTime)}</span>
-            <span className="mx-1 text-text-dim">/</span>
+          <div className="text-xs font-mono text-[#86868B]">
+            <span className="text-[#1D1D1F] font-medium">{formatTime(displayTime)}</span>
+            <span className="mx-1 text-[#A1A1A6]">/</span>
             <span>{formatTime(duration)}</span>
           </div>
         </div>
 
         {/* Right: Sync Status & Fullscreen */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           {/* Sync badge */}
-          <div className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-xl bg-slate-100 border border-surface-border">
+          <div className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-[#F5F5F7] border border-[#D2D2D7]/50">
             {isHost ? (
               <>
-                <Radio className="w-3.5 h-3.5 text-accent-primary animate-pulse" />
-                <span className="text-accent-secondary hidden sm:inline">You are Host</span>
+                <Radio className="w-3.5 h-3.5 text-[#0071E3] animate-pulse" />
+                <span className="text-[#0071E3] hidden sm:inline">Host Controlling</span>
               </>
             ) : allowParticipantControl ? (
               <>
-                <Radio className="w-3.5 h-3.5 text-accent-primary" />
-                <span className="text-accent-secondary hidden sm:inline">Shared Control</span>
+                <Radio className="w-3.5 h-3.5 text-[#0071E3]" />
+                <span className="text-[#0071E3] hidden sm:inline">Shared Control</span>
               </>
             ) : (
               <>
-                <Lock className="w-3 h-3 text-text-dim" />
-                <span className="text-text-muted hidden sm:inline">Synced to Host</span>
+                <Lock className="w-3 h-3 text-[#86868B]" />
+                <span className="text-[#86868B] hidden sm:inline">Synced</span>
               </>
             )}
           </div>
@@ -163,7 +163,7 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
           {/* Fullscreen Button */}
           <button
             onClick={onFullscreenToggle}
-            className="p-2 rounded-xl text-text-muted hover:text-text-main hover:bg-slate-100 transition-colors cursor-pointer"
+            className="p-1.5 rounded-full text-[#86868B] hover:text-[#1D1D1F] hover:bg-[#F5F5F7] transition-colors cursor-pointer"
             title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
           >
             {isFullscreen ? <Minimize className="w-4 h-4" /> : <Maximize className="w-4 h-4" />}

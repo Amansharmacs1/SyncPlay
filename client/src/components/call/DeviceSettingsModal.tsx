@@ -147,17 +147,17 @@ export const DeviceSettingsModal: React.FC = () => {
                   key={p.id}
                   type="button"
                   onClick={() => handlePresetSelect(p.id)}
-                  className={`p-2.5 rounded-xl border text-left flex flex-col justify-between transition-all ${
+                  className={`p-2.5 rounded-xl border text-left flex flex-col justify-between transition-all cursor-pointer ${
                     isSelected
-                      ? 'border-accent-primary bg-accent-light text-accent-secondary shadow-sm'
-                      : 'border-surface-border bg-slate-50 text-text-muted hover:border-slate-300 hover:bg-white'
+                      ? 'border-[#0071E3] bg-[#E8F2FE] text-[#0071E3]'
+                      : 'border-[#E5E5E7] bg-[#F5F5F7] text-[#86868B] hover:border-[#D2D2D7]'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className={`text-xs font-semibold ${isSelected ? 'text-accent-secondary' : 'text-text-main'}`}>{p.label}</span>
-                    {isSelected && <Check className="w-3 h-3 text-accent-primary" />}
+                    <span className={`text-xs font-semibold ${isSelected ? 'text-[#0071E3]' : 'text-[#1D1D1F]'}`}>{p.label}</span>
+                    {isSelected && <Check className="w-3 h-3 text-[#0071E3]" />}
                   </div>
-                  <span className="text-[10px] text-text-muted">{p.spec}</span>
+                  <span className="text-[10px] text-[#86868B]">{p.spec}</span>
                 </button>
               );
             })}

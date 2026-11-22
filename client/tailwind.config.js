@@ -8,47 +8,59 @@ export default {
     extend: {
       colors: {
         background: {
-          primary: '#F8FAFC',   // Crisp modern off-white background
-          secondary: '#F1F5F9', // Clean soft slate secondary
-          card: '#FFFFFF',      // Pure white cards
-          elevated: '#F8FAFC',  // Subtle elevated elements
-          hover: '#F1F5F9',     // Soft hover state
+          primary: '#F5F5F7',   // Apple signature light canvas gray
+          secondary: '#E8E8ED', // Apple subtle card elevation
+          card: '#FFFFFF',      // Apple crisp pure white
+          elevated: '#FFFFFF',
+          hover: '#F0F0F2',
         },
         accent: {
-          primary: '#6366F1',   // Sleek modern Indigo
-          secondary: '#4F46E5', // Deep rich Indigo
-          light: '#EEF2FF',     // Soft Indigo tint
-          glow: 'rgba(99, 102, 241, 0.20)',
-          muted: '#818CF8',
+          primary: '#0071E3',   // Apple signature system blue
+          secondary: '#0077ED', // Apple hover blue
+          light: '#E8F2FE',     // Apple soft blue tint
+          dark: '#0058B0',
+          glow: 'rgba(0, 113, 227, 0.20)',
+          muted: '#70A6FF',
         },
         surface: {
-          border: '#E2E8F0',    // Crisp slate-200 border
-          glass: 'rgba(255, 255, 255, 0.85)',
-          glassBorder: 'rgba(226, 232, 240, 0.8)',
+          border: '#D2D2D7',    // Apple subtle boundary border
+          borderLight: '#E5E5E7',
+          glass: 'rgba(255, 255, 255, 0.82)',
+          glassBorder: 'rgba(210, 210, 215, 0.6)',
         },
         text: {
-          main: '#0F172A',      // Slate-900: sharp, elegant, rich charcoal
-          muted: '#64748B',     // Slate-500: balanced secondary text
-          dim: '#94A3B8',       // Slate-400: subtle tertiary text
+          main: '#1D1D1F',      // Apple deep graphite / near-black
+          muted: '#86868B',     // Apple signature subheadline gray
+          dim: '#A1A1A6',       // Apple tertiary caption gray
         },
         status: {
-          success: '#10B981',
-          error: '#EF4444',
-          warning: '#F59E0B',
-          info: '#3B82F6',
+          success: '#34C759',   // Apple iOS green
+          error: '#FF3B30',     // Apple iOS red
+          warning: '#FF9500',   // Apple iOS orange
+          info: '#0071E3',
         }
       },
       fontFamily: {
-        sans: ['Inter', 'Geist', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: [
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"SF Pro Display"',
+          '"SF Pro Text"',
+          '"Helvetica Neue"',
+          'Helvetica',
+          'Arial',
+          'sans-serif',
+        ],
       },
       boxShadow: {
-        'glow': '0 4px 20px -2px rgba(99, 102, 241, 0.35)',
-        'card': '0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03)',
-        'modal': '0 20px 40px -12px rgba(15, 23, 42, 0.15), 0 0 0 1px rgba(226, 232, 240, 0.8)',
-        'sm-subtle': '0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px 0 rgba(15, 23, 42, 0.04)',
+        'apple-card': '0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02)',
+        'apple-modal': '0 24px 60px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(210, 210, 215, 0.5)',
+        'apple-button': '0 2px 8px rgba(0, 113, 227, 0.25)',
+        'apple-float': '0 12px 36px rgba(0, 0, 0, 0.08)',
       },
-      animation: {
-        'pulse-subtle': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      borderRadius: {
+        '3xl': '24px',
+        '4xl': '32px',
       }
     },
   },

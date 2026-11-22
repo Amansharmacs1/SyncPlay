@@ -54,14 +54,14 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Invite Friends to Watch">
       <div className="space-y-5">
-        <p className="text-sm text-text-muted">
+        <p className="text-xs sm:text-sm text-[#86868B]">
           Share this link or room code with friends so they can join and watch together in real time.
         </p>
 
         {/* Copy Invite Link */}
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-1.5 flex items-center gap-1.5">
-            <Link2 className="w-3.5 h-3.5 text-accent-primary" />
+          <label className="block text-xs font-semibold text-[#86868B] mb-1.5 flex items-center gap-1.5">
+            <Link2 className="w-3.5 h-3.5 text-[#0071E3]" />
             <span>Shareable Room Link</span>
           </label>
           <div className="flex items-center gap-2">
@@ -69,11 +69,11 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
               type="text"
               readOnly
               value={inviteUrl}
-              className="flex-1 bg-slate-50 border border-surface-border rounded-xl px-3.5 py-2 text-xs font-mono text-text-main select-all focus:outline-none"
+              className="flex-1 bg-[#F5F5F7] border border-[#E5E5E7] rounded-xl px-3.5 py-2 text-xs font-mono text-[#1D1D1F] select-all focus:outline-none"
             />
             <button
               onClick={handleCopyLink}
-              className="accent-gradient-btn px-4 py-2 rounded-xl text-xs font-semibold text-white shadow-glow flex items-center gap-1.5 flex-shrink-0 cursor-pointer"
+              className="apple-btn-primary px-4 py-2 text-xs font-medium flex items-center gap-1.5 flex-shrink-0 cursor-pointer"
             >
               {copiedLink ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copiedLink ? 'Copied' : 'Copy Link'}</span>
@@ -83,17 +83,17 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
 
         {/* Copy Room Code */}
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-1.5 flex items-center gap-1.5">
-            <Hash className="w-3.5 h-3.5 text-accent-primary" />
+          <label className="block text-xs font-semibold text-[#86868B] mb-1.5 flex items-center gap-1.5">
+            <Hash className="w-3.5 h-3.5 text-[#0071E3]" />
             <span>Room Code</span>
           </label>
           <div className="flex items-center gap-2">
-            <div className="flex-1 bg-slate-50 border border-surface-border rounded-xl px-3.5 py-2 text-base font-mono font-bold tracking-widest text-accent-secondary">
+            <div className="flex-1 bg-[#F5F5F7] border border-[#E5E5E7] rounded-xl px-3.5 py-2 text-base font-mono font-bold tracking-widest text-[#0071E3]">
               {room.roomId}
             </div>
             <button
               onClick={handleCopyCode}
-              className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-surface-border text-text-main text-xs font-semibold flex items-center gap-1.5 flex-shrink-0 transition-colors cursor-pointer"
+              className="apple-btn-secondary px-4 py-2 text-xs font-medium flex items-center gap-1.5 flex-shrink-0 cursor-pointer"
             >
               {copiedCode ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copiedCode ? 'Copied' : 'Copy Code'}</span>
@@ -105,16 +105,16 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
         <div>
           <button
             onClick={handleNativeShare}
-            className="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 border border-surface-border text-text-main text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+            className="w-full apple-btn-secondary py-2.5 px-4 text-xs font-medium flex items-center justify-center gap-2 cursor-pointer"
           >
-            <Share2 className="w-4 h-4 text-accent-primary" />
-            <span>Share via Mobile / Messaging Apps</span>
+            <Share2 className="w-4 h-4 text-[#0071E3]" />
+            <span>Share via Share Sheet / Apps</span>
           </button>
         </div>
 
         {room.hasPassword && (
-          <div className="flex items-center gap-2 p-3 rounded-xl bg-accent-light border border-accent-primary/20 text-xs text-accent-secondary">
-            <Shield className="w-4 h-4 flex-shrink-0 text-accent-primary" />
+          <div className="flex items-center gap-2 p-3 rounded-xl bg-[#E8F2FE] border border-[#0071E3]/20 text-xs text-[#0071E3]">
+            <Shield className="w-4 h-4 flex-shrink-0" />
             <span>This room is password-protected. Make sure to share the password too.</span>
           </div>
         )}

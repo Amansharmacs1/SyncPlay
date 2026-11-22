@@ -211,7 +211,7 @@ export const PreJoinCallModal: React.FC = () => {
 
         {/* Join Options */}
         <div className="space-y-2.5">
-          <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted">
+          <label className="block text-xs font-semibold text-[#86868B]">
             Choose how to join:
           </label>
 
@@ -220,18 +220,18 @@ export const PreJoinCallModal: React.FC = () => {
             type="button"
             disabled={isJoining}
             onClick={() => handleJoin('camera-and-mic')}
-            className="w-full accent-gradient-btn p-3.5 rounded-xl text-left flex items-center justify-between text-white shadow-glow group disabled:opacity-50"
+            className="w-full apple-btn-primary p-3.5 rounded-2xl text-left flex items-center justify-between text-white group disabled:opacity-50 cursor-pointer"
           >
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0">
+              <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
                 <Video className="w-4 h-4 text-white" />
               </div>
               <div>
-                <div className="text-xs font-bold">Join with Camera & Microphone</div>
+                <div className="text-xs font-semibold">Join with Camera & Microphone</div>
                 <div className="text-[11px] text-white/80">Full audio and video communication</div>
               </div>
             </div>
-            <Sparkles className="w-4 h-4 text-accent-secondary opacity-80 group-hover:scale-110 transition-transform" />
+            <Sparkles className="w-4 h-4 text-white/80 group-hover:scale-110 transition-transform" />
           </button>
 
           {/* Option 2: Microphone Only */}
@@ -239,15 +239,15 @@ export const PreJoinCallModal: React.FC = () => {
             type="button"
             disabled={isJoining}
             onClick={() => handleJoin('mic-only')}
-            className="w-full p-3.5 rounded-xl text-left flex items-center justify-between bg-slate-50 hover:bg-slate-100 border border-surface-border text-text-main transition-colors disabled:opacity-50"
+            className="w-full p-3.5 rounded-2xl text-left flex items-center justify-between bg-[#F5F5F7] hover:bg-[#E8E8ED] border border-[#E5E5E7] text-[#1D1D1F] transition-colors disabled:opacity-50 cursor-pointer"
           >
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-accent-light border border-accent-primary/20 flex items-center justify-center flex-shrink-0 text-accent-secondary">
-                <Mic className="w-4 h-4 text-accent-primary" />
+              <div className="w-9 h-9 rounded-full bg-[#E8F2FE] flex items-center justify-center flex-shrink-0 text-[#0071E3]">
+                <Mic className="w-4 h-4" />
               </div>
               <div>
-                <div className="text-xs font-bold text-text-main">Join with Microphone Only</div>
-                <div className="text-[11px] text-text-muted">Voice chat without webcam video</div>
+                <div className="text-xs font-semibold text-[#1D1D1F]">Join with Microphone Only</div>
+                <div className="text-[11px] text-[#86868B]">Voice chat without webcam video</div>
               </div>
             </div>
           </button>
@@ -257,15 +257,15 @@ export const PreJoinCallModal: React.FC = () => {
             type="button"
             disabled={isJoining}
             onClick={() => handleJoin('no-media')}
-            className="w-full p-3.5 rounded-xl text-left flex items-center justify-between bg-slate-50 hover:bg-slate-100 border border-surface-border text-text-muted hover:text-text-main transition-colors disabled:opacity-50"
+            className="w-full p-3.5 rounded-2xl text-left flex items-center justify-between bg-[#F5F5F7] hover:bg-[#E8E8ED] border border-[#E5E5E7] text-[#86868B] hover:text-[#1D1D1F] transition-colors disabled:opacity-50 cursor-pointer"
           >
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-white border border-surface-border flex items-center justify-center flex-shrink-0 text-text-muted">
+              <div className="w-9 h-9 rounded-full bg-white border border-[#D2D2D7]/50 flex items-center justify-center flex-shrink-0 text-[#86868B]">
                 <Headphones className="w-4 h-4" />
               </div>
               <div>
-                <div className="text-xs font-bold text-text-main">Join Without Audio or Video</div>
-                <div className="text-[11px] text-text-muted">Listen-only mode (you can still unmute anytime)</div>
+                <div className="text-xs font-semibold text-[#1D1D1F]">Join Without Audio or Video</div>
+                <div className="text-[11px] text-[#86868B]">Listen-only mode (you can unmute anytime)</div>
               </div>
             </div>
           </button>

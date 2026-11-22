@@ -60,33 +60,33 @@ export const RoomHeader: React.FC<RoomHeaderProps> = ({
   };
 
   return (
-    <div className="w-full bg-white/90 border-b border-surface-border backdrop-blur-md px-4 py-3 sm:px-6 shadow-sm">
+    <div className="w-full apple-nav-glass px-4 py-2.5 sm:px-6">
       <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
         {/* Left: Branding & Room Info */}
         <div className="flex items-center gap-4">
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-accent-primary to-accent-secondary flex items-center justify-center shadow-glow">
-              <Play className="w-4 h-4 text-white fill-white ml-0.5" />
+          <Link to="/" className="flex items-center gap-2 group transition-opacity hover:opacity-85">
+            <div className="w-7 h-7 rounded-lg bg-[#0071E3] flex items-center justify-center shadow-sm">
+              <Play className="w-3.5 h-3.5 text-white fill-white ml-0.5" />
             </div>
-            <span className="text-base font-bold text-text-main hidden sm:inline-block">
-              Sync<span className="text-accent-primary">Play</span>
+            <span className="text-sm font-semibold tracking-tight text-[#1D1D1F] hidden sm:inline-block">
+              SyncPlay
             </span>
           </Link>
 
-          <div className="h-5 w-px bg-surface-border hidden sm:block" />
+          <div className="h-4 w-px bg-[#D2D2D7]/60 hidden sm:block" />
 
           {/* Room Title & Code */}
           <div className="flex items-center gap-2.5">
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-sm font-bold text-text-main max-w-[160px] sm:max-w-[240px] truncate">
+                <h1 className="text-sm font-semibold text-[#1D1D1F] max-w-[160px] sm:max-w-[240px] truncate">
                   {room.roomName}
                 </h1>
 
                 {/* Password Protection Badge */}
                 {room.hasPassword && (
                   <span title="Password Protected" className="inline-flex items-center">
-                    <Shield className="w-3.5 h-3.5 text-accent-primary" />
+                    <Shield className="w-3.5 h-3.5 text-[#0071E3]" />
                   </span>
                 )}
 
@@ -94,7 +94,7 @@ export const RoomHeader: React.FC<RoomHeaderProps> = ({
                 {room.isLocked && (
                   <span
                     title="Room Locked: New participants cannot join"
-                    className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200"
+                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-[#FFF2E0] text-[#FF9500]"
                   >
                     <Lock className="w-3 h-3" />
                     <span className="hidden sm:inline">Locked</span>
@@ -102,20 +102,20 @@ export const RoomHeader: React.FC<RoomHeaderProps> = ({
                 )}
               </div>
 
-              <div className="flex items-center gap-2 text-xs text-text-muted font-mono mt-0.5">
+              <div className="flex items-center gap-2 text-xs text-[#86868B] font-mono mt-0.5">
                 <button
                   onClick={handleCopyRoomCode}
                   title="Click to copy room code"
-                  className="flex items-center gap-1 hover:text-text-main transition-colors cursor-pointer"
+                  className="flex items-center gap-1 hover:text-[#1D1D1F] transition-colors cursor-pointer"
                 >
-                  <span>ID: {room.roomId}</span>
+                  <span className="bg-[#F5F5F7] px-2 py-0.5 rounded-full text-[11px]">ID: {room.roomId}</span>
                   {copiedCode ? (
-                    <Check className="w-3 h-3 text-status-success" />
+                    <Check className="w-3 h-3 text-[#34C759]" />
                   ) : (
                     <Copy className="w-3 h-3 opacity-60 hover:opacity-100" />
                   )}
                 </button>
-                <span className="text-text-dim">•</span>
+                <span className="text-[#A1A1A6]">•</span>
                 <ConnectionIndicator status={connectionStatus} showText={false} />
               </div>
             </div>
@@ -123,12 +123,12 @@ export const RoomHeader: React.FC<RoomHeaderProps> = ({
         </div>
 
         {/* Right: Actions */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-2.5">
           {/* Change Media Button (Host or when participant control is enabled) */}
           {(isHost || room.allowParticipantControl) && (
             <button
               onClick={onOpenMediaSelect}
-              className="px-3 py-1.5 rounded-xl border border-accent-primary/30 bg-accent-light hover:bg-indigo-100 text-accent-secondary text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+              className="apple-btn-primary px-3.5 py-1.5 text-xs font-medium flex items-center gap-1.5 cursor-pointer"
             >
               <Film className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Change Video</span>
@@ -139,10 +139,10 @@ export const RoomHeader: React.FC<RoomHeaderProps> = ({
           {/* Native Share / Invite Button */}
           <button
             onClick={handleNativeShare}
-            className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-surface-border text-text-main text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="apple-btn-secondary px-3.5 py-1.5 text-xs font-medium flex items-center gap-1.5 cursor-pointer"
             title="Share room invitation"
           >
-            <Share2 className="w-3.5 h-3.5 text-accent-primary" />
+            <Share2 className="w-3.5 h-3.5 text-[#0071E3]" />
             <span className="hidden sm:inline">Share</span>
           </button>
 
@@ -150,17 +150,16 @@ export const RoomHeader: React.FC<RoomHeaderProps> = ({
           {isHost && onOpenSettings && (
             <button
               onClick={onOpenSettings}
-              className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-surface-border text-text-muted hover:text-text-main text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="p-1.5 rounded-full hover:bg-[#F5F5F7] text-[#86868B] hover:text-[#1D1D1F] transition-colors cursor-pointer"
               title="Room Settings"
             >
-              <Settings className="w-3.5 h-3.5 text-accent-primary" />
-              <span className="hidden md:inline">Settings</span>
+              <Settings className="w-4 h-4" />
             </button>
           )}
 
           {/* Participant count pill */}
-          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-50 border border-surface-border text-xs text-text-muted font-medium">
-            <Users className="w-3.5 h-3.5 text-accent-primary" />
+          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#F5F5F7] text-xs text-[#86868B] font-medium">
+            <Users className="w-3.5 h-3.5 text-[#0071E3]" />
             <span>{room.participants.length}</span>
           </div>
 
@@ -168,10 +167,10 @@ export const RoomHeader: React.FC<RoomHeaderProps> = ({
           <button
             onClick={onLeaveRoom}
             title={isHost ? "Leave or End Room" : "Leave Room"}
-            className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl text-text-muted hover:text-status-error hover:bg-status-error/10 border border-transparent hover:border-status-error/20 text-xs font-medium flex items-center gap-1 transition-colors cursor-pointer"
+            className="px-3 py-1.5 rounded-full text-xs font-medium text-[#FF3B30] hover:bg-[#FF3B30]/10 transition-colors cursor-pointer"
           >
-            <LogOut className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">{isHost ? 'Leave' : 'Leave'}</span>
+            <span className="hidden sm:inline">Leave</span>
+            <LogOut className="w-3.5 h-3.5 sm:hidden" />
           </button>
         </div>
       </div>

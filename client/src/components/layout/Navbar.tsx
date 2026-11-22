@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Play, Users, LogIn } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Play } from 'lucide-react';
 
 interface NavbarProps {
   onCreateRoomClick?: () => void;
@@ -8,56 +8,36 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ onCreateRoomClick, onJoinRoomClick }) => {
-  const location = useLocation();
-  const isRoomPage = location.pathname.startsWith('/room/');
-
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-surface-border bg-white/80 backdrop-blur-md shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Brand Logo & Wordmark */}
-        <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-accent-primary to-accent-secondary flex items-center justify-center shadow-glow group-hover:scale-105 transition-transform">
-            <Play className="w-5 h-5 text-white fill-white ml-0.5" />
+    <header className="sticky top-0 z-50 w-full apple-nav-glass transition-all">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-12 sm:h-14 flex items-center justify-between">
+        {/* Apple-Style Minimalist Brand Logo & Wordmark */}
+        <Link to="/" className="flex items-center gap-2 group transition-opacity hover:opacity-85">
+          <div className="w-7 h-7 rounded-lg bg-[#0071E3] flex items-center justify-center text-white shadow-sm">
+            <Play className="w-3.5 h-3.5 fill-white ml-0.5" />
           </div>
-          <span className="text-xl font-bold tracking-tight text-text-main flex items-center">
-            Sync<span className="text-accent-primary">Play</span>
+          <span className="text-base sm:text-lg font-semibold tracking-tight text-[#1D1D1F]">
+            SyncPlay
           </span>
         </Link>
 
-        {/* Center Links (on landing/home) */}
-        {!isRoomPage && (
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-text-muted">
-            <a href="#hero" className="hover:text-text-main transition-colors">
-              Home
-            </a>
-            <a href="#how-it-works" className="hover:text-text-main transition-colors">
-              How It Works
-            </a>
-            <a href="#features" className="hover:text-text-main transition-colors">
-              Features
-            </a>
-          </nav>
-        )}
-
-        {/* Right CTA Actions */}
-        <div className="flex items-center gap-3">
+        {/* Clean Apple-Style Right CTA Actions */}
+        <div className="flex items-center gap-2 sm:gap-3">
           {onJoinRoomClick && (
             <button
               onClick={onJoinRoomClick}
-              className="px-3.5 py-2 text-sm font-medium text-text-muted hover:text-text-main hover:bg-background-secondary rounded-xl transition-colors flex items-center gap-2 cursor-pointer"
+              className="apple-btn-secondary px-3.5 py-1.5 text-xs font-medium cursor-pointer"
             >
-              <LogIn className="w-4 h-4" />
-              <span>Join Room</span>
+              Join Room
             </button>
           )}
 
           {onCreateRoomClick && (
             <button
               onClick={onCreateRoomClick}
-              className="accent-gradient-btn px-4 py-2 text-sm font-semibold text-white rounded-xl shadow-glow flex items-center gap-2 cursor-pointer"
+              className="apple-btn-primary px-4 py-1.5 text-xs font-medium cursor-pointer"
             >
-              <Users className="w-4 h-4" />
-              <span>Create Room</span>
+              Create Room
             </button>
           )}
         </div>

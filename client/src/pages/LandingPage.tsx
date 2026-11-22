@@ -35,33 +35,28 @@ export const LandingPage: React.FC = () => {
 
         <FeaturesSection />
 
-        {/* Final CTA Section */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
-          <div className="relative rounded-3xl bg-white border border-surface-border p-8 sm:p-14 overflow-hidden shadow-card">
-            {/* Ambient Indigo Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-accent-primary/10 blur-[120px] pointer-events-none rounded-full" />
+        {/* Final CTA Section - Apple Minimalist Banner */}
+        <section className="py-20 px-4 sm:px-6 max-w-5xl mx-auto text-center">
+          <div className="apple-card p-10 sm:p-16 bg-white">
+            <div className="max-w-2xl mx-auto">
+              <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#0071E3] block mb-3">
+                Zero Friction
+              </span>
 
-            <div className="relative z-10 max-w-2xl mx-auto">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-accent-light border border-accent-primary/20 text-xs text-accent-secondary font-semibold mb-6">
-                <Sparkles className="w-3.5 h-3.5 text-accent-primary" />
-                <span>Ready in 5 seconds • No Account Required</span>
-              </div>
-
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-text-main tracking-tight mb-4">
+              <h2 className="text-3xl sm:text-5xl font-semibold text-[#1D1D1F] tracking-tight mb-4">
                 Distance shouldn't stop movie night.
               </h2>
 
-              <p className="text-sm sm:text-base text-text-muted mb-8 leading-relaxed font-normal">
-                Invite your friends, paste a video link, and enjoy synchronized playback with live face-to-face video and voice chat.
+              <p className="text-base text-[#86868B] mb-8 leading-relaxed font-normal">
+                Invite your favorite people, paste a video link, and enjoy synchronized playback with live face-to-face video calling.
               </p>
 
               <button
                 onClick={() => setIsCreateOpen(true)}
-                className="accent-gradient-btn px-8 py-4 rounded-xl text-white font-semibold text-base shadow-glow inline-flex items-center gap-2.5 hover:scale-105 transition-all group cursor-pointer"
+                className="apple-btn-primary px-8 py-3.5 text-base font-medium inline-flex items-center gap-2 cursor-pointer"
               >
                 <Play className="w-4 h-4 fill-white" />
                 <span>Start Watching Together</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
           </div>

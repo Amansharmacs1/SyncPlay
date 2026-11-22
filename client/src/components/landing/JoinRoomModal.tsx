@@ -84,8 +84,8 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
 
         {/* Display Name */}
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-1.5">
-            Your Display Name <span className="text-status-error">*</span>
+          <label className="block text-xs font-semibold text-[#86868B] mb-1.5">
+            Your Display Name <span className="text-[#FF3B30]">*</span>
           </label>
           <input
             type="text"
@@ -94,14 +94,14 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
             placeholder="e.g. Jordan"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full bg-slate-50 border border-surface-border rounded-xl px-4 py-2.5 text-sm text-text-main placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary focus:bg-white transition-all"
+            className="w-full bg-[#F5F5F7] border border-[#E5E5E7] rounded-xl px-4 py-2.5 text-sm text-[#1D1D1F] placeholder-[#86868B] focus:outline-none focus:border-[#0071E3] focus:bg-white transition-all"
           />
         </div>
 
         {/* Room Code */}
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-1.5">
-            Room Code <span className="text-status-error">*</span>
+          <label className="block text-xs font-semibold text-[#86868B] mb-1.5">
+            Room Code <span className="text-[#FF3B30]">*</span>
           </label>
           <input
             type="text"
@@ -110,14 +110,14 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
             placeholder="e.g. AB12CD"
             value={roomId}
             onChange={(e) => setRoomId(e.target.value.toUpperCase())}
-            className="w-full uppercase font-mono tracking-wider bg-slate-50 border border-surface-border rounded-xl px-4 py-2.5 text-sm text-text-main placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary focus:bg-white transition-all"
+            className="w-full uppercase font-mono tracking-wider bg-[#F5F5F7] border border-[#E5E5E7] rounded-xl px-4 py-2.5 text-sm text-[#1D1D1F] placeholder-[#86868B] focus:outline-none focus:border-[#0071E3] focus:bg-white transition-all"
           />
         </div>
 
         {/* Password input (if room is protected) */}
         {requiresPassword && (
           <div className="animate-in fade-in slide-in-from-top-1">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-accent-secondary mb-1.5 flex items-center gap-1.5">
+            <label className="block text-xs font-semibold text-[#0071E3] mb-1.5 flex items-center gap-1.5">
               <KeyRound className="w-3.5 h-3.5" />
               <span>Room Password Required</span>
             </label>
@@ -128,7 +128,7 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
               placeholder="Enter room password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-slate-50 border border-accent-primary/50 rounded-xl px-4 py-2.5 text-sm text-text-main placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary focus:bg-white transition-all"
+              className="w-full bg-[#F5F5F7] border border-[#0071E3] rounded-xl px-4 py-2.5 text-sm text-[#1D1D1F] placeholder-[#86868B] focus:outline-none focus:border-[#0071E3] focus:bg-white transition-all"
             />
           </div>
         )}
@@ -138,7 +138,7 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
           <button
             type="submit"
             disabled={loading}
-            className="w-full accent-gradient-btn py-3 px-4 rounded-xl text-sm font-semibold text-white shadow-glow flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+            className="w-full apple-btn-primary py-3 px-4 text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
           >
             {loading ? (
               <>
@@ -146,10 +146,7 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
                 <span>Checking Room...</span>
               </>
             ) : (
-              <>
-                <LogIn className="w-4 h-4" />
-                <span>{requiresPassword ? 'Unlock & Join Room' : 'Join Room'}</span>
-              </>
+              <span>{requiresPassword ? 'Unlock & Join Room' : 'Join Room'}</span>
             )}
           </button>
         </div>

@@ -174,7 +174,7 @@ export const RoomSettingsModal: React.FC<RoomSettingsModalProps> = ({ isOpen, on
         <div className="pt-2">
           <button
             type="submit"
-            className="w-full accent-gradient-btn py-2.5 px-4 rounded-xl text-xs font-semibold text-white shadow-glow flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full apple-btn-primary py-2.5 px-4 text-xs font-medium flex items-center justify-center gap-2 cursor-pointer"
           >
             <Check className="w-4 h-4" />
             <span>Save Settings</span>

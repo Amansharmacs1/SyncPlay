@@ -68,8 +68,8 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClos
 
         {/* Display Name */}
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-1.5">
-            Your Display Name <span className="text-status-error">*</span>
+          <label className="block text-xs font-semibold text-[#86868B] mb-1.5">
+            Your Display Name <span className="text-[#FF3B30]">*</span>
           </label>
           <input
             type="text"
@@ -78,28 +78,28 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClos
             placeholder="e.g. Alex"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full bg-slate-50 border border-surface-border rounded-xl px-4 py-2.5 text-sm text-text-main placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary focus:bg-white transition-all"
+            className="w-full bg-[#F5F5F7] border border-[#E5E5E7] rounded-xl px-4 py-2.5 text-sm text-[#1D1D1F] placeholder-[#86868B] focus:outline-none focus:border-[#0071E3] focus:bg-white transition-all"
           />
         </div>
 
         {/* Room Name */}
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-1.5">
-            Room Name <span className="text-text-dim text-[11px] normal-case">(optional)</span>
+          <label className="block text-xs font-semibold text-[#86868B] mb-1.5">
+            Room Name <span className="text-[#A1A1A6] font-normal">(optional)</span>
           </label>
           <input
             type="text"
             maxLength={50}
-            placeholder="e.g. Movie Night with Friends"
+            placeholder="e.g. Movie Night"
             value={roomName}
             onChange={(e) => setRoomName(e.target.value)}
-            className="w-full bg-slate-50 border border-surface-border rounded-xl px-4 py-2.5 text-sm text-text-main placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary focus:bg-white transition-all"
+            className="w-full bg-[#F5F5F7] border border-[#E5E5E7] rounded-xl px-4 py-2.5 text-sm text-[#1D1D1F] placeholder-[#86868B] focus:outline-none focus:border-[#0071E3] focus:bg-white transition-all"
           />
         </div>
 
         {/* Visibility Selection */}
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-1.5">
+          <label className="block text-xs font-semibold text-[#86868B] mb-1.5">
             Room Visibility
           </label>
           <div className="grid grid-cols-2 gap-3">
@@ -108,14 +108,14 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClos
               onClick={() => setVisibility('public')}
               className={`flex items-center gap-2.5 p-3 rounded-xl border text-left text-xs font-medium transition-all cursor-pointer ${
                 visibility === 'public'
-                  ? 'border-accent-primary bg-accent-light text-accent-secondary shadow-xs'
-                  : 'border-surface-border bg-slate-50 text-text-muted hover:border-slate-300'
+                  ? 'border-[#0071E3] bg-[#E8F2FE] text-[#0071E3]'
+                  : 'border-[#E5E5E7] bg-[#F5F5F7] text-[#86868B] hover:border-[#D2D2D7]'
               }`}
             >
-              <Globe className="w-4 h-4 text-accent-primary flex-shrink-0" />
+              <Globe className="w-4 h-4 text-[#0071E3] flex-shrink-0" />
               <div>
-                <div className="font-semibold text-text-main">Public</div>
-                <div className="text-[11px] text-text-muted">Anyone with link</div>
+                <div className="font-semibold text-[#1D1D1F]">Public</div>
+                <div className="text-[11px] text-[#86868B]">Anyone with link</div>
               </div>
             </button>
 
@@ -124,14 +124,14 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClos
               onClick={() => setVisibility('private')}
               className={`flex items-center gap-2.5 p-3 rounded-xl border text-left text-xs font-medium transition-all cursor-pointer ${
                 visibility === 'private'
-                  ? 'border-accent-primary bg-accent-light text-accent-secondary shadow-xs'
-                  : 'border-surface-border bg-slate-50 text-text-muted hover:border-slate-300'
+                  ? 'border-[#0071E3] bg-[#E8F2FE] text-[#0071E3]'
+                  : 'border-[#E5E5E7] bg-[#F5F5F7] text-[#86868B] hover:border-[#D2D2D7]'
               }`}
             >
-              <Lock className="w-4 h-4 text-accent-primary flex-shrink-0" />
+              <Lock className="w-4 h-4 text-[#0071E3] flex-shrink-0" />
               <div>
-                <div className="font-semibold text-text-main">Private</div>
-                <div className="text-[11px] text-text-muted">Direct invites only</div>
+                <div className="font-semibold text-[#1D1D1F]">Private</div>
+                <div className="text-[11px] text-[#86868B]">Direct invites only</div>
               </div>
             </button>
           </div>
@@ -139,9 +139,9 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClos
 
         {/* Room Password */}
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-1.5 flex items-center justify-between">
+          <label className="block text-xs font-semibold text-[#86868B] mb-1.5 flex items-center justify-between">
             <span>Room Password</span>
-            <span className="text-text-dim text-[11px] normal-case">(optional)</span>
+            <span className="text-[#A1A1A6] font-normal">(optional)</span>
           </label>
           <div className="relative">
             <input
@@ -150,9 +150,9 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClos
               placeholder="Leave blank for open access"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-slate-50 border border-surface-border rounded-xl px-4 py-2.5 text-sm text-text-main placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary focus:bg-white transition-all"
+              className="w-full bg-[#F5F5F7] border border-[#E5E5E7] rounded-xl px-4 py-2.5 text-sm text-[#1D1D1F] placeholder-[#86868B] focus:outline-none focus:border-[#0071E3] focus:bg-white transition-all"
             />
-            <Shield className="w-4 h-4 text-text-dim absolute right-3.5 top-3" />
+            <Shield className="w-4 h-4 text-[#86868B] absolute right-3.5 top-3" />
           </div>
         </div>
 
@@ -161,7 +161,7 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClos
           <button
             type="submit"
             disabled={loading}
-            className="w-full accent-gradient-btn py-3 px-4 rounded-xl text-sm font-semibold text-white shadow-glow flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+            className="w-full apple-btn-primary py-3 px-4 text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
           >
             {loading ? (
               <>
@@ -169,10 +169,7 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClos
                 <span>Creating Room...</span>
               </>
             ) : (
-              <>
-                <Sparkles className="w-4 h-4" />
-                <span>Launch Watch Room</span>
-              </>
+              <span>Launch Watch Room</span>
             )}
           </button>
         </div>

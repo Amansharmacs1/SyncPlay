@@ -9,10 +9,10 @@ export const VideoPlayer: React.FC = () => {
 
   if (!room || !room.media) {
     return (
-      <div className="w-full aspect-video rounded-2xl bg-white border border-surface-border flex flex-col items-center justify-center p-6 text-center shadow-card">
-        <Film className="w-12 h-12 text-accent-primary mb-3 opacity-60" />
-        <h3 className="text-base font-semibold text-text-main">No Video Selected</h3>
-        <p className="text-sm text-text-muted mt-1">
+      <div className="w-full aspect-video rounded-2xl sm:rounded-3xl bg-white border border-[#D2D2D7]/60 flex flex-col items-center justify-center p-6 text-center shadow-apple-card">
+        <Film className="w-12 h-12 text-[#0071E3] mb-3 opacity-40" />
+        <h3 className="text-base font-semibold text-[#1D1D1F]">No Video Selected</h3>
+        <p className="text-sm text-[#86868B] mt-1 max-w-sm">
           Wait for the host to choose a video, or change video if you are the host.
         </p>
       </div>

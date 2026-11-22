@@ -296,7 +296,7 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ url }) => {
   return (
     <div ref={wrapperRef} className="flex flex-col gap-3 w-full">
       {/* Video Viewport */}
-      <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black border border-surface-border shadow-2xl flex items-center justify-center">
+      <div className="relative w-full aspect-video rounded-2xl sm:rounded-3xl overflow-hidden bg-black border border-[#D2D2D7]/60 shadow-apple-float flex items-center justify-center">
         {/* IFrame Host Container */}
         <div ref={containerRef} className="w-full h-full" />
 

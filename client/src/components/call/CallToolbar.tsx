@@ -1,8 +1,6 @@
 import React from 'react';
 import { useCallStore } from '../../stores/useCallStore.js';
-import { useRoomStore } from '../../stores/useRoomStore.js';
 import { webrtcManager } from '../../services/webrtc/WebRTCManager.js';
-import { socketService } from '../../services/socket.js';
 import {
   Mic,
   MicOff,
@@ -12,10 +10,6 @@ import {
   MonitorOff,
   Settings,
   PhoneOff,
-  Power,
-  MessageSquare,
-  Users,
-  PhoneCall,
 } from 'lucide-react';
 
 interface CallToolbarProps {
@@ -25,12 +19,7 @@ interface CallToolbarProps {
   isParticipantsOpen?: boolean;
 }
 
-export const CallToolbar: React.FC<CallToolbarProps> = ({
-  onToggleChat,
-  onToggleParticipants,
-  isChatOpen = true,
-  isParticipantsOpen = false,
-}) => {
+export const CallToolbar: React.FC<CallToolbarProps> = () => {
   const {
     isInCall,
     isJoining,
@@ -41,33 +30,28 @@ export const CallToolbar: React.FC<CallToolbarProps> = ({
     setDeviceSettingsModalOpen,
   } = useCallStore();
 
-  const { isHost } = useRoomStore();
-
-  const handleEndRoom = () => {
-    if (!isHost) return;
-    if (confirm('Are you sure you want to end this room for all participants?')) {
-      socketService.endRoom();
-    }
-  };
-
-  // If not currently in call, show a "Join Video Call" action button
+  // If not currently in call, show clean Apple banner to join call
   if (!isInCall) {
     return (
-      <div className="w-full bg-white border border-surface-border rounded-2xl p-3 shadow-card flex items-center justify-between gap-4">
+      <div className="w-full apple-card p-3 sm:p-4 flex items-center justify-between gap-4 bg-white">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-accent-light border border-accent-primary/20 flex items-center justify-center text-accent-secondary">
-            <PhoneCall className="w-4 h-4 text-accent-primary" />
+          <div className="w-10 h-10 rounded-full bg-[#E8F2FE] flex items-center justify-center text-[#0071E3] flex-shrink-0">
+            <Video className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xs font-bold text-text-main">Live Voice & Video</div>
-            <div className="text-[11px] text-text-muted">Talk and watch together with friends</div>
+            <div className="text-xs sm:text-sm font-semibold text-[#1D1D1F]">
+              Live Voice & Video
+            </div>
+            <div className="text-xs text-[#86868B]">
+              Talk face-to-face with everyone in the room
+            </div>
           </div>
         </div>
 
         <button
           onClick={() => setPreJoinModalOpen(true)}
           disabled={isJoining}
-          className="accent-gradient-btn px-4 py-2 rounded-xl text-xs font-semibold text-white shadow-glow flex items-center gap-2 disabled:opacity-50"
+          className="apple-btn-primary px-5 py-2 text-xs sm:text-sm font-medium flex items-center gap-2 cursor-pointer disabled:opacity-50 flex-shrink-0"
         >
           <Video className="w-4 h-4" />
           <span>{isJoining ? 'Joining...' : 'Join Call'}</span>
@@ -76,124 +60,69 @@ export const CallToolbar: React.FC<CallToolbarProps> = ({
     );
   }
 
+  // Floating FaceTime-style controls
   return (
-    <div className="w-full bg-white border border-surface-border rounded-2xl p-3 sm:p-4 shadow-card flex items-center justify-between gap-2 sm:gap-4 overflow-x-auto">
-      {/* Left / Media Controls */}
-      <div className="flex items-center gap-2 sm:gap-3">
+    <div className="w-full flex items-center justify-center py-2">
+      <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/90 backdrop-blur-xl border border-[#D2D2D7]/70 shadow-apple-float">
         {/* Mic Toggle */}
         <button
           onClick={() => webrtcManager.toggleMicrophone()}
           title={microphoneEnabled ? 'Mute Microphone' : 'Unmute Microphone'}
-          className={`p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all ${
+          className={`w-10 h-10 rounded-full flex items-center justify-center transition-all cursor-pointer ${
             microphoneEnabled
-              ? 'bg-slate-100 hover:bg-slate-200 text-text-main border border-surface-border'
-              : 'bg-rose-500 hover:bg-rose-600 text-white shadow-sm'
+              ? 'bg-[#F5F5F7] hover:bg-[#E8E8ED] text-[#1D1D1F]'
+              : 'bg-[#FF3B30] text-white shadow-sm'
           }`}
         >
           {microphoneEnabled ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
-          <span className="hidden md:inline">
-            {microphoneEnabled ? 'Mute' : 'Unmuted'}
-          </span>
         </button>
 
         {/* Camera Toggle */}
         <button
           onClick={() => webrtcManager.toggleCamera()}
           title={cameraEnabled ? 'Turn Off Camera' : 'Turn On Camera'}
-          className={`p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all ${
+          className={`w-10 h-10 rounded-full flex items-center justify-center transition-all cursor-pointer ${
             cameraEnabled
-              ? 'bg-slate-100 hover:bg-slate-200 text-text-main border border-surface-border'
-              : 'bg-slate-100/70 hover:bg-slate-200/80 text-text-muted border border-surface-border'
+              ? 'bg-[#F5F5F7] hover:bg-[#E8E8ED] text-[#1D1D1F]'
+              : 'bg-[#F5F5F7] text-[#86868B] hover:text-[#1D1D1F]'
           }`}
         >
-          {cameraEnabled ? <Video className="w-4 h-4" /> : <VideoOff className="w-4 h-4 text-status-error" />}
-          <span className="hidden md:inline">
-            {cameraEnabled ? 'Camera' : 'Camera Off'}
-          </span>
+          {cameraEnabled ? <Video className="w-4 h-4" /> : <VideoOff className="w-4 h-4 text-[#FF3B30]" />}
         </button>
 
         {/* Screen Share Toggle */}
         <button
           onClick={() => webrtcManager.toggleScreenShare()}
           title={isScreenSharing ? 'Stop Screen Sharing' : 'Share Screen'}
-          className={`p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all ${
+          className={`w-10 h-10 rounded-full flex items-center justify-center transition-all cursor-pointer ${
             isScreenSharing
-              ? 'accent-gradient-btn text-white shadow-glow'
-              : 'bg-slate-100 hover:bg-slate-200 text-text-main border border-surface-border'
+              ? 'bg-[#0071E3] text-white shadow-sm'
+              : 'bg-[#F5F5F7] hover:bg-[#E8E8ED] text-[#1D1D1F]'
           }`}
         >
-          {isScreenSharing ? (
-            <MonitorOff className="w-4 h-4" />
-          ) : (
-            <Monitor className="w-4 h-4 text-accent-secondary" />
-          )}
-          <span className="hidden md:inline">
-            {isScreenSharing ? 'Stop Share' : 'Share Screen'}
-          </span>
+          {isScreenSharing ? <MonitorOff className="w-4 h-4" /> : <Monitor className="w-4 h-4" />}
         </button>
 
         {/* Device Settings */}
         <button
           onClick={() => setDeviceSettingsModalOpen(true)}
           title="Audio & Video Settings"
-          className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-surface-border text-text-muted hover:text-text-main transition-colors"
+          className="w-10 h-10 rounded-full bg-[#F5F5F7] hover:bg-[#E8E8ED] text-[#86868B] hover:text-[#1D1D1F] flex items-center justify-center transition-colors cursor-pointer"
         >
           <Settings className="w-4 h-4" />
         </button>
-      </div>
 
-      {/* Right / Panel & Exit Controls */}
-      <div className="flex items-center gap-2 sm:gap-3">
-        {/* Chat Toggle */}
-        {onToggleChat && (
-          <button
-            onClick={onToggleChat}
-            title="Toggle Live Chat"
-            className={`p-2.5 rounded-xl border transition-colors ${
-              isChatOpen
-                ? 'bg-accent-light border-accent-primary/30 text-accent-secondary'
-                : 'bg-slate-100 hover:bg-slate-200 border-surface-border text-text-muted hover:text-text-main'
-            }`}
-          >
-            <MessageSquare className="w-4 h-4" />
-          </button>
-        )}
+        <div className="w-px h-6 bg-[#D2D2D7]/60" />
 
-        {/* Participants Toggle */}
-        {onToggleParticipants && (
-          <button
-            onClick={onToggleParticipants}
-            title="Toggle Participants"
-            className={`p-2.5 rounded-xl border transition-colors ${
-              isParticipantsOpen
-                ? 'bg-accent-light border-accent-primary/30 text-accent-secondary'
-                : 'bg-slate-100 hover:bg-slate-200 border-surface-border text-text-muted hover:text-text-main'
-            }`}
-          >
-            <Users className="w-4 h-4" />
-          </button>
-        )}
-
-        {/* Leave Call Button */}
+        {/* Leave Call (FaceTime Red Pill) */}
         <button
           onClick={() => webrtcManager.leaveCall()}
-          title="Leave Call (Remain in Room)"
-          className="p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+          title="Leave Call"
+          className="px-4 h-10 rounded-full bg-[#FF3B30] hover:bg-[#E02E24] text-white text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
         >
-          <PhoneOff className="w-4 h-4" />
-          <span className="hidden sm:inline">Leave Call</span>
+          <PhoneOff className="w-3.5 h-3.5" />
+          <span>Leave Call</span>
         </button>
-
-        {/* Host End Room Button */}
-        {isHost && (
-          <button
-            onClick={handleEndRoom}
-            title="End Watch Party Room"
-            className="p-2.5 rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 border border-surface-border text-text-muted transition-colors"
-          >
-            <Power className="w-4 h-4" />
-          </button>
-        )}
       </div>
     </div>
   );

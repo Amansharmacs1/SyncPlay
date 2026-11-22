@@ -65,8 +65,8 @@ export const ParticipantTile: React.FC<ParticipantTileProps> = ({
     <div
       className={`relative rounded-2xl overflow-hidden bg-slate-900 border transition-all duration-300 group flex items-center justify-center select-none ${
         isSpeaking
-          ? 'ring-2 ring-accent-primary border-accent-primary shadow-glow'
-          : 'border-surface-border shadow-sm'
+          ? 'ring-2 ring-[#34C759] shadow-md'
+          : 'border-[#D2D2D7]/50 shadow-sm'
       } ${className}`}
     >
       {/* Remote audio playback element (hidden, unmuted) */}
@@ -94,12 +94,12 @@ export const ParticipantTile: React.FC<ParticipantTileProps> = ({
       {/* Top Overlay Badges */}
       <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
         {/* Name and Screen share badge */}
-        <div className="flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/10 max-w-[70%]">
-          <span className="text-xs font-semibold text-white truncate">
+        <div className="flex items-center gap-1.5 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 max-w-[70%]">
+          <span className="text-xs font-medium text-white truncate">
             {participant.name} {participant.isLocal ? '(You)' : ''}
           </span>
           {participant.screenSharing && (
-            <span title="Screen Sharing" className="flex items-center text-accent-secondary">
+            <span title="Screen Sharing" className="flex items-center text-[#0071E3]">
               <Monitor className="w-3 h-3" />
             </span>
           )}
@@ -110,7 +110,7 @@ export const ParticipantTile: React.FC<ParticipantTileProps> = ({
           {/* Connection quality */}
           <span
             title={`Connection: ${participant.connectionQuality}`}
-            className={`p-1 rounded-md bg-black/60 backdrop-blur-md border border-white/10 ${qualityColor}`}
+            className={`p-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10 ${qualityColor}`}
           >
             <Wifi className="w-3 h-3" />
           </span>
@@ -119,7 +119,7 @@ export const ParticipantTile: React.FC<ParticipantTileProps> = ({
           {onToggleFocus && (
             <button
               onClick={onToggleFocus}
-              className="p-1 rounded-md bg-black/60 hover:bg-black/90 backdrop-blur-md text-text-muted hover:text-white border border-white/10 transition-colors"
+              className="p-1.5 rounded-full bg-black/50 hover:bg-black/80 backdrop-blur-md text-white/80 hover:text-white border border-white/10 transition-colors"
               title={isFocused ? 'Unfocus' : 'Focus'}
             >
               {isFocused ? <Minimize2 className="w-3 h-3" /> : <Maximize2 className="w-3 h-3" />}
@@ -132,12 +132,12 @@ export const ParticipantTile: React.FC<ParticipantTileProps> = ({
       <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1.5 pointer-events-none">
         {/* Mic muted indicator */}
         {!participant.microphoneEnabled ? (
-          <span className="p-1 rounded-md bg-status-error/90 text-white backdrop-blur-md shadow-sm">
+          <span className="p-1.5 rounded-full bg-[#FF3B30] text-white backdrop-blur-md shadow-sm">
             <MicOff className="w-3 h-3" />
           </span>
         ) : isSpeaking ? (
           /* Speaking wave indicator */
-          <span className="px-2 py-0.5 rounded-md bg-status-success/90 text-white text-[10px] font-bold backdrop-blur-md animate-pulse">
+          <span className="px-2.5 py-0.5 rounded-full bg-[#34C759] text-white text-[10px] font-medium backdrop-blur-md animate-pulse">
             Speaking
           </span>
         ) : null}

@@ -34,22 +34,22 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
+      {/* Apple-style Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-black/35 backdrop-blur-md transition-opacity"
         onClick={onClose}
       />
 
-      {/* Modal Dialog */}
+      {/* Modal Dialog Sheet */}
       <div
-        className={`relative w-full ${maxWidth} bg-white border border-surface-border rounded-2xl shadow-modal overflow-hidden transform transition-all z-10`}
+        className={`relative w-full ${maxWidth} bg-white rounded-3xl shadow-apple-modal overflow-hidden border border-[#D2D2D7]/60 transform transition-all z-10`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-surface-border bg-slate-50/70">
-          <h3 className="text-base font-bold text-text-main">{title}</h3>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#D2D2D7]/40 bg-[#F5F5F7]/80">
+          <h3 className="text-base font-semibold text-[#1D1D1F] tracking-tight">{title}</h3>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-text-muted hover:text-text-main hover:bg-slate-200/60 transition-colors cursor-pointer"
+            className="w-7 h-7 rounded-full bg-[#E8E8ED] hover:bg-[#D2D2D7] text-[#1D1D1F] flex items-center justify-center transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>

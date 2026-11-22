@@ -26,7 +26,7 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
   if (message.isSystem) {
     return (
       <div className="flex items-center justify-center my-2 text-center animate-in fade-in">
-        <span className="text-[11px] text-text-muted px-3 py-1 rounded-full bg-slate-100 border border-surface-border">
+        <span className="text-[11px] text-[#86868B] px-3 py-1 rounded-full bg-[#F5F5F7]">
           {message.message}
         </span>
       </div>
@@ -44,7 +44,7 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
 
   return (
     <div
-      className={`relative flex items-start gap-2.5 group ${
+      className={`relative flex items-start gap-2 group ${
         isSelf ? 'flex-row-reverse' : 'flex-row'
       } animate-in fade-in slide-in-from-bottom-1`}
     >
@@ -54,15 +54,15 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
         <div
           className={`relative rounded-2xl px-3.5 py-2 text-xs leading-relaxed ${
             isSelf
-              ? 'bg-accent-primary text-white rounded-tr-none shadow-xs'
-              : 'bg-white text-text-main border border-surface-border rounded-tl-none shadow-sm'
+              ? 'bg-[#0071E3] text-white rounded-br-sm shadow-sm'
+              : 'bg-[#E9E9EB] text-[#1D1D1F] rounded-bl-sm'
           }`}
         >
           {/* Header row: Sender name, Host badge, Time */}
           <div className="flex items-center gap-1.5 mb-1 flex-wrap">
             <span
-              className={`font-semibold text-[11px] ${
-                isSelf ? 'text-white/95' : 'text-accent-secondary'
+              className={`font-medium text-[11px] ${
+                isSelf ? 'text-white/90' : 'text-[#86868B]'
               }`}
             >
               {isSelf ? 'You' : message.senderName}
@@ -70,23 +70,23 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
 
             {isMessageHost && (
               <span
-                className={`px-1.5 py-0.2 rounded text-[9px] font-bold ${
+                className={`px-1.5 py-0.2 rounded-full text-[9px] font-semibold ${
                   isSelf
-                    ? 'bg-white/20 text-white border border-white/30'
-                    : 'bg-accent-light text-accent-secondary border border-accent-primary/30'
+                    ? 'bg-white/20 text-white'
+                    : 'bg-[#0071E3]/10 text-[#0071E3]'
                 }`}
               >
                 Host
               </span>
             )}
 
-            <span className={`text-[10px] ${isSelf ? 'text-white/70' : 'text-text-dim'}`}>
+            <span className={`text-[10px] ${isSelf ? 'text-white/70' : 'text-[#86868B]'}`}>
               {timeString}
             </span>
           </div>
 
           {/* Message content */}
-          <p className="break-words select-text">{message.message}</p>
+          <p className="break-words select-text text-[13px]">{message.message}</p>
 
           {/* Quick Reaction Button (hover trigger) */}
           <div
@@ -96,7 +96,7 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
           >
             <button
               onClick={() => setShowPicker(!showPicker)}
-              className="p-1 rounded-full bg-white hover:bg-slate-100 border border-surface-border text-text-muted hover:text-text-main shadow-xs transition-colors cursor-pointer"
+              className="p-1 rounded-full bg-white hover:bg-[#F5F5F7] border border-[#D2D2D7]/60 text-[#86868B] hover:text-[#1D1D1F] shadow-sm transition-colors cursor-pointer"
               title="React to message"
             >
               <Smile className="w-3.5 h-3.5" />
@@ -107,13 +107,13 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
               <div
                 className={`absolute bottom-full mb-1 ${
                   isSelf ? 'right-0' : 'left-0'
-                } z-20 flex items-center gap-1 p-1 bg-white border border-surface-border rounded-xl shadow-modal`}
+                } z-20 flex items-center gap-1 p-1 bg-white border border-[#D2D2D7]/60 rounded-full shadow-apple-modal`}
               >
                 {REACTION_EMOJIS.map((emoji) => (
                   <button
                     key={emoji}
                     onClick={() => handleToggleReaction(emoji)}
-                    className="p-1.5 text-xs hover:bg-slate-100 rounded-lg hover:scale-125 transition-transform cursor-pointer"
+                    className="p-1.5 text-xs hover:bg-[#F5F5F7] rounded-full hover:scale-125 transition-transform cursor-pointer"
                   >
                     {emoji}
                   </button>
@@ -132,10 +132,10 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
                 <button
                   key={emoji}
                   onClick={() => handleToggleReaction(emoji)}
-                  className={`flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-medium border transition-colors cursor-pointer ${
+                  className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium transition-colors cursor-pointer ${
                     hasReacted
-                      ? 'bg-accent-light border-accent-primary/40 text-accent-secondary shadow-xs'
-                      : 'bg-white border-surface-border text-text-muted hover:bg-slate-100'
+                      ? 'bg-[#E8F2FE] text-[#0071E3] border border-[#0071E3]/20 shadow-xs'
+                      : 'bg-[#F5F5F7] text-[#1D1D1F] border border-[#D2D2D7]/40 hover:bg-[#E8E8ED]'
                   }`}
                   title={`${users.length} reaction${users.length === 1 ? '' : 's'}`}
                 >

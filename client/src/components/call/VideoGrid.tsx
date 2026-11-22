@@ -60,9 +60,9 @@ export const VideoGrid: React.FC<VideoGridProps> = ({ className = '' }) => {
   return (
     <div className={`flex flex-col gap-3 ${className}`}>
       {/* Layout Control Bar */}
-      <div className="flex items-center justify-between px-3 py-1.5 bg-white border border-surface-border rounded-xl text-xs text-text-muted shadow-sm">
-        <span className="font-semibold text-text-main">
-          In Call ({allParticipants.length})
+      <div className="flex items-center justify-between px-3 py-1.5 bg-white border border-[#D2D2D7]/50 rounded-full text-xs text-[#86868B] shadow-xs">
+        <span className="font-medium text-[#1D1D1F]">
+          FaceTime ({allParticipants.length})
         </span>
 
         <div className="flex items-center gap-1">
@@ -72,10 +72,10 @@ export const VideoGrid: React.FC<VideoGridProps> = ({ className = '' }) => {
               setFocusedParticipantId(null);
             }}
             title="Sidebar Strip"
-            className={`p-1.5 rounded-lg transition-colors ${
+            className={`p-1.5 rounded-full transition-colors cursor-pointer ${
               callLayout === 'sidebar'
-                ? 'bg-accent-light text-accent-secondary border border-accent-primary/20'
-                : 'text-text-muted hover:text-text-main'
+                ? 'bg-[#E8F2FE] text-[#0071E3]'
+                : 'text-[#86868B] hover:text-[#1D1D1F]'
             }`}
           >
             <Columns className="w-3.5 h-3.5" />
@@ -87,10 +87,10 @@ export const VideoGrid: React.FC<VideoGridProps> = ({ className = '' }) => {
               setFocusedParticipantId(null);
             }}
             title="Grid View"
-            className={`p-1.5 rounded-lg transition-colors ${
+            className={`p-1.5 rounded-full transition-colors cursor-pointer ${
               callLayout === 'grid'
-                ? 'bg-accent-light text-accent-secondary border border-accent-primary/20'
-                : 'text-text-muted hover:text-text-main'
+                ? 'bg-[#E8F2FE] text-[#0071E3]'
+                : 'text-[#86868B] hover:text-[#1D1D1F]'
             }`}
           >
             <LayoutGrid className="w-3.5 h-3.5" />

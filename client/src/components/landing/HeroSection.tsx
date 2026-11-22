@@ -1,5 +1,4 @@
 import React from 'react';
-import { Users, LogIn, ArrowRight, Sparkles } from 'lucide-react';
 import { WatchRoomPreview } from './WatchRoomPreview.js';
 
 interface HeroSectionProps {
@@ -12,51 +11,45 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   onJoinRoomClick,
 }) => {
   return (
-    <section id="hero" className="relative pt-20 pb-28 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      {/* Top ambient radial gradient glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] purple-gradient-glow pointer-events-none" />
-
-      <div className="max-w-5xl mx-auto text-center relative z-10">
-        {/* Release / Status badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-surface-border bg-white text-xs font-semibold text-accent-secondary mb-8 shadow-sm">
-          <Sparkles className="w-3.5 h-3.5 text-accent-primary animate-pulse" />
-          <span>SyncPlay • Instant Social Watch Parties • Zero Login Required</span>
-        </div>
-
-        {/* Main Headline */}
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-text-main mb-6">
-          Your people. Your screen. <br />
-          <span className="text-gradient">One shared moment.</span>
-        </h1>
-
-        {/* Supporting Text */}
-        <p className="text-lg sm:text-xl text-text-muted max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
-          Watch videos together, talk face-to-face, and share every moment — no matter where everyone is.
-        </p>
-
-        {/* CTAs */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-          <button
-            onClick={onCreateRoomClick}
-            className="w-full sm:w-auto accent-gradient-btn px-8 py-4 rounded-xl text-white font-semibold text-base shadow-glow flex items-center justify-center gap-2.5 group cursor-pointer"
-          >
-            <Users className="w-5 h-5" />
-            <span>Create a Room</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </button>
-
-          <button
-            onClick={onJoinRoomClick}
-            className="w-full sm:w-auto px-8 py-4 rounded-xl text-text-main font-semibold text-base border border-surface-border bg-white hover:bg-background-secondary hover:border-slate-300 shadow-sm transition-all flex items-center justify-center gap-2.5 cursor-pointer"
-          >
-            <LogIn className="w-5 h-5 text-text-muted" />
-            <span>Join a Room</span>
-          </button>
-        </div>
-
-        {/* Watch Room Preview */}
-        <WatchRoomPreview />
+    <section id="hero" className="relative pt-12 sm:pt-20 pb-20 px-4 sm:px-6 max-w-6xl mx-auto text-center">
+      {/* Apple-Style Minimalist Eyebrow */}
+      <div className="inline-block mb-3">
+        <span className="text-xs sm:text-sm font-semibold tracking-wide uppercase text-[#0071E3]">
+          SyncPlay
+        </span>
       </div>
+
+      {/* Apple-Style Bold Confident Headline */}
+      <h1 className="text-4xl sm:text-6xl lg:text-7xl font-semibold tracking-tight text-[#1D1D1F] max-w-4xl mx-auto leading-[1.08] mb-5">
+        Watch together. <br className="hidden sm:inline" />
+        Talk together. Anywhere.
+      </h1>
+
+      {/* Clean Apple Subheadline */}
+      <p className="text-base sm:text-xl text-[#86868B] max-w-2xl mx-auto font-normal leading-relaxed mb-8">
+        Real-time synchronized streaming with live video calling and voice chat.
+        Zero friction — no accounts, sign-ups, or apps required.
+      </p>
+
+      {/* Apple Pill Action Buttons */}
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-16">
+        <button
+          onClick={onCreateRoomClick}
+          className="w-full sm:w-auto apple-btn-primary px-7 py-3 text-sm font-medium cursor-pointer"
+        >
+          Start a Watch Party
+        </button>
+
+        <button
+          onClick={onJoinRoomClick}
+          className="w-full sm:w-auto apple-btn-secondary px-7 py-3 text-sm font-medium cursor-pointer"
+        >
+          Join with Code
+        </button>
+      </div>
+
+      {/* Hardware / Window Preview Showcase */}
+      <WatchRoomPreview />
     </section>
   );
 };
