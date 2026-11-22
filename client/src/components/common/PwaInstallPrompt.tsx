@@ -44,13 +44,13 @@ export const PwaInstallPrompt: React.FC = () => {
 
   return (
     <aside aria-label="Install App" className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-40 animate-in slide-in-from-bottom-3 fade-in duration-300">
-      <div className="bg-background-card/95 border border-accent-primary/40 rounded-2xl p-4 shadow-modal backdrop-blur-md flex items-center justify-between gap-3">
+      <div className="bg-white/95 border border-surface-border rounded-2xl p-4 shadow-modal backdrop-blur-md flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-accent-primary to-accent-secondary flex items-center justify-center flex-shrink-0 shadow-glow">
             <Download className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h4 className="text-xs font-bold text-white">Install SyncPlay App</h4>
+            <h4 className="text-xs font-bold text-text-main">Install SyncPlay App</h4>
             <p className="text-[11px] text-text-muted">
               Add to home screen for fullscreen watch parties & fast launching.
             </p>
@@ -60,14 +60,14 @@ export const PwaInstallPrompt: React.FC = () => {
         <div className="flex items-center gap-1.5 flex-shrink-0">
           <button
             onClick={handleInstallClick}
-            className="accent-gradient-btn px-3 py-1.5 rounded-xl text-xs font-semibold text-white shadow-glow"
+            className="accent-gradient-btn px-3 py-1.5 rounded-xl text-xs font-semibold text-white shadow-sm"
           >
             Install
           </button>
           <button
             onClick={handleDismiss}
             aria-label="Dismiss app install banner"
-            className="p-1 text-text-dim hover:text-white rounded-lg transition-colors"
+            className="p-1 text-text-muted hover:text-text-main rounded-lg transition-colors"
           >
             <X className="w-4 h-4" />
           </button>

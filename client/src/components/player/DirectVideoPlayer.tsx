@@ -210,18 +210,18 @@ export const DirectVideoPlayer: React.FC<DirectVideoPlayerProps> = ({ url }) => 
 
         {/* Loading overlay */}
         {isLoading && !errorMessage && (
-          <div className="absolute inset-0 bg-background-primary flex flex-col items-center justify-center gap-3">
-            <Loader2 className="w-8 h-8 text-accent-secondary animate-spin" />
-            <span className="text-sm text-text-muted font-medium">Loading Video Stream...</span>
+          <div className="absolute inset-0 bg-slate-900 flex flex-col items-center justify-center gap-3">
+            <Loader2 className="w-8 h-8 text-accent-primary animate-spin" />
+            <span className="text-sm text-slate-300 font-medium">Loading Video Stream...</span>
           </div>
         )}
 
         {/* Error overlay */}
         {errorMessage && (
-          <div className="absolute inset-0 bg-background-primary/95 flex flex-col items-center justify-center p-6 text-center">
+          <div className="absolute inset-0 bg-slate-900/95 flex flex-col items-center justify-center p-6 text-center">
             <AlertCircle className="w-10 h-10 text-status-error mb-3" />
             <h4 className="text-base font-semibold text-white mb-1">Playback Error</h4>
-            <p className="text-sm text-text-muted max-w-md">{errorMessage}</p>
+            <p className="text-sm text-slate-300 max-w-md">{errorMessage}</p>
           </div>
         )}
       </div>

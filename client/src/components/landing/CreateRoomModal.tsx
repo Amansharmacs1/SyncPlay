@@ -78,7 +78,7 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClos
             placeholder="e.g. Alex"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full bg-background-primary border border-surface-border rounded-xl px-4 py-2.5 text-sm text-white placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary"
+            className="w-full bg-slate-50 border border-surface-border rounded-xl px-4 py-2.5 text-sm text-text-main placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary focus:bg-white transition-all"
           />
         </div>
 
@@ -93,7 +93,7 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClos
             placeholder="e.g. Movie Night with Friends"
             value={roomName}
             onChange={(e) => setRoomName(e.target.value)}
-            className="w-full bg-background-primary border border-surface-border rounded-xl px-4 py-2.5 text-sm text-white placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary"
+            className="w-full bg-slate-50 border border-surface-border rounded-xl px-4 py-2.5 text-sm text-text-main placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary focus:bg-white transition-all"
           />
         </div>
 
@@ -106,15 +106,15 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClos
             <button
               type="button"
               onClick={() => setVisibility('public')}
-              className={`flex items-center gap-2.5 p-3 rounded-xl border text-left text-xs font-medium transition-all ${
+              className={`flex items-center gap-2.5 p-3 rounded-xl border text-left text-xs font-medium transition-all cursor-pointer ${
                 visibility === 'public'
-                  ? 'border-accent-primary bg-accent-primary/10 text-white'
-                  : 'border-surface-border bg-background-primary text-text-muted hover:border-text-dim'
+                  ? 'border-accent-primary bg-accent-light text-accent-secondary shadow-xs'
+                  : 'border-surface-border bg-slate-50 text-text-muted hover:border-slate-300'
               }`}
             >
-              <Globe className="w-4 h-4 text-accent-secondary flex-shrink-0" />
+              <Globe className="w-4 h-4 text-accent-primary flex-shrink-0" />
               <div>
-                <div className="font-semibold text-white">Public</div>
+                <div className="font-semibold text-text-main">Public</div>
                 <div className="text-[11px] text-text-muted">Anyone with link</div>
               </div>
             </button>
@@ -122,15 +122,15 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClos
             <button
               type="button"
               onClick={() => setVisibility('private')}
-              className={`flex items-center gap-2.5 p-3 rounded-xl border text-left text-xs font-medium transition-all ${
+              className={`flex items-center gap-2.5 p-3 rounded-xl border text-left text-xs font-medium transition-all cursor-pointer ${
                 visibility === 'private'
-                  ? 'border-accent-primary bg-accent-primary/10 text-white'
-                  : 'border-surface-border bg-background-primary text-text-muted hover:border-text-dim'
+                  ? 'border-accent-primary bg-accent-light text-accent-secondary shadow-xs'
+                  : 'border-surface-border bg-slate-50 text-text-muted hover:border-slate-300'
               }`}
             >
-              <Lock className="w-4 h-4 text-accent-secondary flex-shrink-0" />
+              <Lock className="w-4 h-4 text-accent-primary flex-shrink-0" />
               <div>
-                <div className="font-semibold text-white">Private</div>
+                <div className="font-semibold text-text-main">Private</div>
                 <div className="text-[11px] text-text-muted">Direct invites only</div>
               </div>
             </button>
@@ -150,7 +150,7 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClos
               placeholder="Leave blank for open access"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-background-primary border border-surface-border rounded-xl px-4 py-2.5 text-sm text-white placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary"
+              className="w-full bg-slate-50 border border-surface-border rounded-xl px-4 py-2.5 text-sm text-text-main placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary focus:bg-white transition-all"
             />
             <Shield className="w-4 h-4 text-text-dim absolute right-3.5 top-3" />
           </div>
@@ -161,7 +161,7 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClos
           <button
             type="submit"
             disabled={loading}
-            className="w-full accent-gradient-btn py-3 px-4 rounded-xl text-sm font-semibold text-white shadow-glow flex items-center justify-center gap-2 disabled:opacity-50"
+            className="w-full accent-gradient-btn py-3 px-4 rounded-xl text-sm font-semibold text-white shadow-glow flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
           >
             {loading ? (
               <>

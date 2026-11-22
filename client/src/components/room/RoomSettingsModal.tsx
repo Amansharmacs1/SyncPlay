@@ -75,18 +75,18 @@ export const RoomSettingsModal: React.FC<RoomSettingsModalProps> = ({ isOpen, on
             maxLength={50}
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full bg-background-primary border border-surface-border rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-accent-primary"
+            className="w-full bg-slate-50 border border-surface-border rounded-xl px-3.5 py-2 text-sm text-text-main focus:outline-none focus:border-accent-primary focus:bg-white transition-all"
           />
         </div>
 
         {/* Room Lock Toggle */}
-        <div className="p-3 rounded-xl bg-background-secondary border border-surface-border flex items-center justify-between">
+        <div className="p-3.5 rounded-xl bg-slate-50 border border-surface-border flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isLocked ? 'bg-status-error/20 text-status-error' : 'bg-accent-primary/20 text-accent-secondary'}`}>
+            <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isLocked ? 'bg-rose-100 text-rose-600' : 'bg-accent-light text-accent-primary'}`}>
               {isLocked ? <Lock className="w-4 h-4" /> : <Unlock className="w-4 h-4" />}
             </div>
             <div>
-              <div className="text-xs font-bold text-white">Lock Room</div>
+              <div className="text-xs font-bold text-text-main">Lock Room</div>
               <div className="text-[11px] text-text-muted">
                 {isLocked ? 'New participants cannot join' : 'Anyone with link can join'}
               </div>
@@ -101,13 +101,13 @@ export const RoomSettingsModal: React.FC<RoomSettingsModalProps> = ({ isOpen, on
         </div>
 
         {/* Participant Playback Control Permissions */}
-        <div className="p-3 rounded-xl bg-background-secondary border border-surface-border flex items-center justify-between">
+        <div className="p-3.5 rounded-xl bg-slate-50 border border-surface-border flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-accent-primary/20 text-accent-secondary flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-accent-light text-accent-primary flex items-center justify-center">
               <Sliders className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-xs font-bold text-white">Open Playback Controls</div>
+              <div className="text-xs font-bold text-text-main">Open Playback Controls</div>
               <div className="text-[11px] text-text-muted">
                 {allowParticipantControl ? 'Anyone can play, pause, or seek' : 'Only Host can control playback'}
               </div>
@@ -126,8 +126,8 @@ export const RoomSettingsModal: React.FC<RoomSettingsModalProps> = ({ isOpen, on
           <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-1.5 flex items-center justify-between">
             <span>Room Password</span>
             {room.hasPassword && (
-              <span className="text-[10px] text-accent-secondary flex items-center gap-1 font-mono">
-                <Shield className="w-3 h-3" /> Password Active
+              <span className="text-[10px] text-accent-secondary flex items-center gap-1 font-mono font-semibold">
+                <Shield className="w-3 h-3 text-accent-primary" /> Password Active
               </span>
             )}
           </label>
@@ -143,10 +143,10 @@ export const RoomSettingsModal: React.FC<RoomSettingsModalProps> = ({ isOpen, on
                     setPassword(e.target.value);
                     setRemovePassword(false);
                   }}
-                  className="flex-1 bg-background-primary border border-surface-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accent-primary"
+                  className="flex-1 bg-slate-50 border border-surface-border rounded-xl px-3 py-2 text-xs text-text-main focus:outline-none focus:border-accent-primary focus:bg-white transition-all"
                 />
               </div>
-              <label className="flex items-center gap-2 text-xs text-text-dim cursor-pointer">
+              <label className="flex items-center gap-2 text-xs text-text-muted cursor-pointer">
                 <input
                   type="checkbox"
                   checked={removePassword}
@@ -165,7 +165,7 @@ export const RoomSettingsModal: React.FC<RoomSettingsModalProps> = ({ isOpen, on
               placeholder="Enter new password (optional)"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-background-primary border border-surface-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accent-primary"
+              className="w-full bg-slate-50 border border-surface-border rounded-xl px-3 py-2 text-xs text-text-main focus:outline-none focus:border-accent-primary focus:bg-white transition-all"
             />
           )}
         </div>
@@ -174,7 +174,7 @@ export const RoomSettingsModal: React.FC<RoomSettingsModalProps> = ({ isOpen, on
         <div className="pt-2">
           <button
             type="submit"
-            className="w-full accent-gradient-btn py-2.5 px-4 rounded-xl text-xs font-semibold text-white shadow-glow flex items-center justify-center gap-2"
+            className="w-full accent-gradient-btn py-2.5 px-4 rounded-xl text-xs font-semibold text-white shadow-glow flex items-center justify-center gap-2 cursor-pointer"
           >
             <Check className="w-4 h-4" />
             <span>Save Settings</span>

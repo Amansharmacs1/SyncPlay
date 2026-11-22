@@ -12,28 +12,28 @@ export const Navbar: React.FC<NavbarProps> = ({ onCreateRoomClick, onJoinRoomCli
   const isRoomPage = location.pathname.startsWith('/room/');
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-surface-border bg-background-primary/80 backdrop-blur-md">
+    <header className="sticky top-0 z-40 w-full border-b border-surface-border bg-white/80 backdrop-blur-md shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand Logo & Wordmark */}
         <Link to="/" className="flex items-center gap-2.5 group">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-accent-primary to-accent-secondary flex items-center justify-center shadow-glow group-hover:scale-105 transition-transform">
             <Play className="w-5 h-5 text-white fill-white ml-0.5" />
           </div>
-          <span className="text-xl font-bold tracking-tight text-white flex items-center">
-            Sync<span className="text-accent-secondary">Play</span>
+          <span className="text-xl font-bold tracking-tight text-text-main flex items-center">
+            Sync<span className="text-accent-primary">Play</span>
           </span>
         </Link>
 
         {/* Center Links (on landing/home) */}
         {!isRoomPage && (
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-text-muted">
-            <a href="#hero" className="hover:text-white transition-colors">
+            <a href="#hero" className="hover:text-text-main transition-colors">
               Home
             </a>
-            <a href="#how-it-works" className="hover:text-white transition-colors">
+            <a href="#how-it-works" className="hover:text-text-main transition-colors">
               How It Works
             </a>
-            <a href="#features" className="hover:text-white transition-colors">
+            <a href="#features" className="hover:text-text-main transition-colors">
               Features
             </a>
           </nav>
@@ -44,7 +44,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onCreateRoomClick, onJoinRoomCli
           {onJoinRoomClick && (
             <button
               onClick={onJoinRoomClick}
-              className="px-3.5 py-2 text-sm font-medium text-text-muted hover:text-white hover:bg-background-elevated rounded-xl transition-colors flex items-center gap-2"
+              className="px-3.5 py-2 text-sm font-medium text-text-muted hover:text-text-main hover:bg-background-secondary rounded-xl transition-colors flex items-center gap-2 cursor-pointer"
             >
               <LogIn className="w-4 h-4" />
               <span>Join Room</span>
@@ -54,7 +54,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onCreateRoomClick, onJoinRoomCli
           {onCreateRoomClick && (
             <button
               onClick={onCreateRoomClick}
-              className="accent-gradient-btn px-4 py-2 text-sm font-semibold text-white rounded-xl shadow-glow flex items-center gap-2"
+              className="accent-gradient-btn px-4 py-2 text-sm font-semibold text-white rounded-xl shadow-glow flex items-center gap-2 cursor-pointer"
             >
               <Users className="w-4 h-4" />
               <span>Create Room</span>

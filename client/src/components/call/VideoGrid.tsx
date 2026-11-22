@@ -60,8 +60,8 @@ export const VideoGrid: React.FC<VideoGridProps> = ({ className = '' }) => {
   return (
     <div className={`flex flex-col gap-3 ${className}`}>
       {/* Layout Control Bar */}
-      <div className="flex items-center justify-between px-2 py-1 bg-background-card/60 border border-surface-border rounded-xl text-xs text-text-muted">
-        <span className="font-semibold text-white">
+      <div className="flex items-center justify-between px-3 py-1.5 bg-white border border-surface-border rounded-xl text-xs text-text-muted shadow-sm">
+        <span className="font-semibold text-text-main">
           In Call ({allParticipants.length})
         </span>
 
@@ -74,8 +74,8 @@ export const VideoGrid: React.FC<VideoGridProps> = ({ className = '' }) => {
             title="Sidebar Strip"
             className={`p-1.5 rounded-lg transition-colors ${
               callLayout === 'sidebar'
-                ? 'bg-accent-primary/20 text-accent-secondary border border-accent-primary/30'
-                : 'hover:text-white'
+                ? 'bg-accent-light text-accent-secondary border border-accent-primary/20'
+                : 'text-text-muted hover:text-text-main'
             }`}
           >
             <Columns className="w-3.5 h-3.5" />
@@ -89,8 +89,8 @@ export const VideoGrid: React.FC<VideoGridProps> = ({ className = '' }) => {
             title="Grid View"
             className={`p-1.5 rounded-lg transition-colors ${
               callLayout === 'grid'
-                ? 'bg-accent-primary/20 text-accent-secondary border border-accent-primary/30'
-                : 'hover:text-white'
+                ? 'bg-accent-light text-accent-secondary border border-accent-primary/20'
+                : 'text-text-muted hover:text-text-main'
             }`}
           >
             <LayoutGrid className="w-3.5 h-3.5" />

@@ -45,10 +45,10 @@ export const FeaturesSection: React.FC = () => {
   return (
     <section id="features" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div className="text-center max-w-3xl mx-auto mb-16">
-        <h2 className="text-xs uppercase tracking-widest text-accent-secondary font-semibold mb-3">
+        <h2 className="text-xs uppercase tracking-widest text-accent-primary font-bold mb-3">
           Engineered for Pure Social Entertainment
         </h2>
-        <p className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+        <p className="text-3xl sm:text-4xl font-extrabold text-text-main tracking-tight">
           Everything you need for an unforgettable watch party.
         </p>
       </div>

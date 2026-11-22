@@ -164,8 +164,8 @@ export const WatchRoomPage: React.FC = () => {
   if (isCheckingRoom) {
     return (
       <div className="min-h-screen bg-background-primary flex flex-col items-center justify-center p-6 text-center">
-        <Loader2 className="w-10 h-10 text-accent-secondary animate-spin mb-4" />
-        <h3 className="text-lg font-semibold text-white">Connecting to Watch Room...</h3>
+        <Loader2 className="w-10 h-10 text-accent-primary animate-spin mb-4" />
+        <h3 className="text-lg font-semibold text-text-main">Connecting to Watch Room...</h3>
         <p className="text-sm text-text-muted mt-1 font-mono">Room ID: {normRoomId}</p>
       </div>
     );
@@ -175,12 +175,12 @@ export const WatchRoomPage: React.FC = () => {
   if (needsJoinInfo) {
     return (
       <div className="min-h-screen bg-background-primary flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-background-card border border-surface-border rounded-2xl p-6 sm:p-8 shadow-card">
+        <div className="max-w-md w-full bg-white border border-surface-border rounded-2xl p-6 sm:p-8 shadow-card">
           <div className="text-center mb-6">
-            <span className="inline-block px-3 py-1 rounded-full bg-accent-primary/10 border border-accent-primary/20 text-xs font-mono text-accent-secondary mb-3">
+            <span className="inline-block px-3 py-1 rounded-full bg-accent-light border border-accent-primary/20 text-xs font-mono font-medium text-accent-secondary mb-3">
               Room: {normRoomId}
             </span>
-            <h2 className="text-2xl font-bold text-white tracking-tight">Join Watch Party</h2>
+            <h2 className="text-2xl font-bold text-text-main tracking-tight">Join Watch Party</h2>
             <p className="text-xs text-text-muted mt-1">
               Enter your name to join your friends in this room.
             </p>
@@ -204,14 +204,14 @@ export const WatchRoomPage: React.FC = () => {
                 placeholder="e.g. Taylor"
                 value={inputName}
                 onChange={(e) => setInputName(e.target.value)}
-                className="w-full bg-background-primary border border-surface-border rounded-xl px-4 py-2.5 text-sm text-white placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary"
+                className="w-full bg-slate-50 border border-surface-border rounded-xl px-4 py-2.5 text-sm text-text-main placeholder-text-dim focus:outline-none focus:border-accent-primary focus:bg-white focus:ring-1 focus:ring-accent-primary transition-colors"
               />
             </div>
 
             {roomHasPassword && (
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-1.5 flex items-center gap-1.5">
-                  <KeyRound className="w-3.5 h-3.5 text-accent-secondary" />
+                  <KeyRound className="w-3.5 h-3.5 text-accent-primary" />
                   <span>Room Password <span className="text-status-error">*</span></span>
                 </label>
                 <input
@@ -220,7 +220,7 @@ export const WatchRoomPage: React.FC = () => {
                   placeholder="Enter room password"
                   value={inputPassword}
                   onChange={(e) => setInputPassword(e.target.value)}
-                  className="w-full bg-background-primary border border-surface-border rounded-xl px-4 py-2.5 text-sm text-white placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary"
+                  className="w-full bg-slate-50 border border-surface-border rounded-xl px-4 py-2.5 text-sm text-text-main placeholder-text-dim focus:outline-none focus:border-accent-primary focus:bg-white focus:ring-1 focus:ring-accent-primary transition-colors"
                 />
               </div>
             )}
@@ -243,11 +243,11 @@ export const WatchRoomPage: React.FC = () => {
     return (
       <div className="min-h-screen bg-background-primary flex flex-col items-center justify-center p-6 text-center">
         <AlertCircle className="w-12 h-12 text-status-error mb-4" />
-        <h3 className="text-xl font-bold text-white mb-2">Room Unavailable</h3>
+        <h3 className="text-xl font-bold text-text-main mb-2">Room Unavailable</h3>
         <p className="text-sm text-text-muted max-w-md mb-6">{errorMessage}</p>
         <button
           onClick={() => navigate('/')}
-          className="accent-gradient-btn px-6 py-2.5 rounded-xl text-sm font-semibold text-white"
+          className="accent-gradient-btn px-6 py-2.5 rounded-xl text-sm font-semibold text-white shadow-sm"
         >
           Return to Home
         </button>
@@ -273,12 +273,12 @@ export const WatchRoomPage: React.FC = () => {
 
           {/* Current Media Info Card */}
           {room?.media && (
-            <div className="bg-background-card border border-surface-border rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
+            <div className="bg-white border border-surface-border rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-card">
               <div className="truncate">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-accent-secondary bg-accent-primary/10 px-2 py-0.5 rounded-md border border-accent-primary/20 mr-2">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-accent-secondary bg-accent-light px-2 py-0.5 rounded-md border border-accent-primary/20 mr-2">
                   {room.media.type === 'youtube' ? 'YouTube' : 'Direct MP4'}
                 </span>
-                <span className="text-sm font-bold text-white truncate align-middle">
+                <span className="text-sm font-bold text-text-main truncate align-middle">
                   {room.media.title}
                 </span>
               </div>
@@ -307,17 +307,17 @@ export const WatchRoomPage: React.FC = () => {
         {/* Right Column: Chat, Queue & Participants Panel (~32%) */}
         <div className="w-full lg:w-[32%] flex flex-col min-h-[480px] lg:h-[calc(100vh-130px)] sticky top-20">
           {/* 3-Tab Selector */}
-          <div className="flex items-center gap-1 p-1 bg-background-secondary border border-surface-border rounded-xl mb-3 flex-shrink-0">
+          <div className="flex items-center gap-1 p-1 bg-slate-100 border border-surface-border rounded-xl mb-3 flex-shrink-0">
             {/* Tab 1: Live Chat */}
             <button
               onClick={() => handleTabSwitch('chat')}
               className={`flex-1 py-2 px-1 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all relative ${
                 activeTab === 'chat'
-                  ? 'bg-background-card text-white shadow-sm border border-surface-border'
-                  : 'text-text-muted hover:text-white'
+                  ? 'bg-white text-text-main shadow-sm border border-surface-border'
+                  : 'text-text-muted hover:text-text-main'
               }`}
             >
-              <MessageSquare className="w-3.5 h-3.5 text-accent-secondary" />
+              <MessageSquare className="w-3.5 h-3.5 text-accent-primary" />
               <span>Chat</span>
               {activeTab !== 'chat' && unreadMessageCount > 0 && (
                 <span className="px-1.5 py-0.2 rounded-full bg-accent-primary text-[10px] font-bold text-white animate-pulse">
@@ -331,14 +331,14 @@ export const WatchRoomPage: React.FC = () => {
               onClick={() => handleTabSwitch('queue')}
               className={`flex-1 py-2 px-1 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
                 activeTab === 'queue'
-                  ? 'bg-background-card text-white shadow-sm border border-surface-border'
-                  : 'text-text-muted hover:text-white'
+                  ? 'bg-white text-text-main shadow-sm border border-surface-border'
+                  : 'text-text-muted hover:text-text-main'
               }`}
             >
-              <ListVideo className="w-3.5 h-3.5 text-accent-secondary" />
+              <ListVideo className="w-3.5 h-3.5 text-accent-primary" />
               <span>Queue</span>
               {Boolean(room?.queue && room.queue.length > 0) && (
-                <span className="px-1.5 py-0.2 rounded-full bg-accent-primary/20 text-accent-secondary text-[10px] font-medium border border-accent-primary/30">
+                <span className="px-1.5 py-0.2 rounded-full bg-accent-light text-accent-secondary text-[10px] font-medium border border-accent-primary/20">
                   {room!.queue.length}
                 </span>
               )}
@@ -349,11 +349,11 @@ export const WatchRoomPage: React.FC = () => {
               onClick={() => handleTabSwitch('participants')}
               className={`flex-1 py-2 px-1 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
                 activeTab === 'participants'
-                  ? 'bg-background-card text-white shadow-sm border border-surface-border'
-                  : 'text-text-muted hover:text-white'
+                  ? 'bg-white text-text-main shadow-sm border border-surface-border'
+                  : 'text-text-muted hover:text-text-main'
               }`}
             >
-              <Users className="w-3.5 h-3.5 text-accent-secondary" />
+              <Users className="w-3.5 h-3.5 text-accent-primary" />
               <span>People ({room?.participants.length || 0})</span>
             </button>
           </div>
@@ -386,13 +386,13 @@ export const WatchRoomPage: React.FC = () => {
           <div className="flex flex-col sm:flex-row items-center justify-end gap-2 pt-2">
             <button
               onClick={() => setIsLeaveModalOpen(false)}
-              className="w-full sm:w-auto px-4 py-2 rounded-xl bg-background-elevated hover:bg-background-hover border border-surface-border text-xs font-medium text-white transition-colors"
+              className="w-full sm:w-auto px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-surface-border text-xs font-medium text-text-main transition-colors"
             >
               Stay in Room
             </button>
             <button
               onClick={executeLeave}
-              className="w-full sm:w-auto px-4 py-2 rounded-xl bg-status-error/80 hover:bg-status-error text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+              className="w-full sm:w-auto px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-sm"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span>Leave Room</span>

@@ -31,43 +31,39 @@ export const WatchQueuePanel: React.FC = () => {
   const handleAddSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const cleanUrl = url.trim();
-    if (!cleanUrl) {
-      setError('Please provide a video URL.');
-      return;
-    }
+    if (!cleanUrl) return;
 
     const ytId = extractYouTubeId(cleanUrl);
     const isDirect = isDirectVideoUrl(cleanUrl);
 
     if (!ytId && !isDirect) {
-      setError('Invalid media URL. Please provide a YouTube link or a direct .mp4/.webm URL.');
+      setError('Please provide a valid YouTube video URL or direct .mp4/.webm URL.');
       return;
     }
 
-    const mediaType = ytId ? 'youtube' : 'direct';
-    const finalTitle = title.trim() || (ytId ? `YouTube Video (${ytId})` : 'Direct Video Stream');
+    const type = ytId ? 'youtube' : 'direct';
+    const computedTitle = title.trim() || (ytId ? `YouTube Video (${ytId})` : 'Direct Video Stream');
 
     socketService.addToQueue({
-      type: mediaType,
+      type,
       url: cleanUrl,
-      title: finalTitle,
+      title: computedTitle,
     });
 
-    addToast(`Added to queue: ${finalTitle}`, 'success');
+    addToast(`Added "${computedTitle}" to queue!`, 'success');
     setUrl('');
     setTitle('');
-    setError(null);
     setIsAddOpen(false);
-  };
-
-  const handlePlayItem = (itemId: string) => {
-    if (!canControl) return;
-    socketService.playQueueItem(itemId);
+    setError(null);
   };
 
   const handleRemoveItem = (itemId: string) => {
     socketService.removeFromQueue(itemId);
-    addToast('Removed from queue', 'info');
+    addToast('Removed video from queue', 'info');
+  };
+
+  const handlePlayItem = (itemId: string) => {
+    socketService.playQueueItem(itemId);
   };
 
   const handleMove = (index: number, direction: 'up' | 'down') => {
@@ -83,20 +79,20 @@ export const WatchQueuePanel: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-background-card border border-surface-border rounded-2xl overflow-hidden shadow-card">
+    <div className="flex flex-col h-full bg-white border border-surface-border rounded-2xl overflow-hidden shadow-card">
       {/* Header */}
-      <div className="px-4 py-3 border-b border-surface-border bg-background-secondary/60 flex items-center justify-between">
+      <div className="px-4 py-3 border-b border-surface-border bg-slate-50/80 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <ListVideo className="w-4 h-4 text-accent-secondary" />
-          <h2 className="text-xs font-bold uppercase tracking-wider text-white">Watch Queue</h2>
+          <ListVideo className="w-4 h-4 text-accent-primary" />
+          <h2 className="text-xs font-bold uppercase tracking-wider text-text-main">Watch Queue</h2>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[11px] font-semibold text-accent-secondary bg-accent-primary/10 px-2 py-0.5 rounded-full border border-accent-primary/20">
+          <span className="text-[11px] font-semibold text-accent-secondary bg-accent-light px-2 py-0.5 rounded-full border border-accent-primary/20">
             {queue.length} upcoming
           </span>
           <button
             onClick={() => setIsAddOpen(!isAddOpen)}
-            className="p-1.5 rounded-lg bg-accent-primary hover:bg-accent-secondary text-white text-xs font-semibold flex items-center gap-1 transition-all"
+            className="p-1.5 rounded-lg bg-accent-primary hover:bg-accent-secondary text-white text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer shadow-xs"
             title="Add Video to Queue"
           >
             {isAddOpen ? <X className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
@@ -108,10 +104,10 @@ export const WatchQueuePanel: React.FC = () => {
       {isAddOpen && (
         <form
           onSubmit={handleAddSubmit}
-          className="p-3 border-b border-surface-border bg-background-secondary/90 space-y-2 animate-in fade-in slide-in-from-top-1"
+          className="p-3 border-b border-surface-border bg-slate-50/90 space-y-2 animate-in fade-in slide-in-from-top-1"
         >
           {error && (
-            <div className="p-2 text-[11px] text-status-error bg-status-error/10 border border-status-error/20 rounded-lg">
+            <div className="p-2 text-[11px] text-status-error bg-rose-50 border border-rose-200 rounded-lg">
               {error}
             </div>
           )}
@@ -124,7 +120,7 @@ export const WatchQueuePanel: React.FC = () => {
               setUrl(e.target.value);
               setError(null);
             }}
-            className="w-full bg-background-primary border border-surface-border rounded-xl px-3 py-1.5 text-xs text-white placeholder-text-dim focus:outline-none focus:border-accent-primary"
+            className="w-full bg-white border border-surface-border rounded-xl px-3 py-1.5 text-xs text-text-main placeholder-text-dim focus:outline-none focus:border-accent-primary"
           />
           <div className="flex items-center gap-2">
             <input
@@ -132,11 +128,11 @@ export const WatchQueuePanel: React.FC = () => {
               placeholder="Video title (optional)"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="flex-1 bg-background-primary border border-surface-border rounded-xl px-3 py-1.5 text-xs text-white placeholder-text-dim focus:outline-none focus:border-accent-primary"
+              className="flex-1 bg-white border border-surface-border rounded-xl px-3 py-1.5 text-xs text-text-main placeholder-text-dim focus:outline-none focus:border-accent-primary"
             />
             <button
               type="submit"
-              className="accent-gradient-btn px-3 py-1.5 rounded-xl text-xs font-semibold text-white shadow-glow flex items-center gap-1 flex-shrink-0"
+              className="accent-gradient-btn px-3 py-1.5 rounded-xl text-xs font-semibold text-white shadow-glow flex items-center gap-1 flex-shrink-0 cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Queue</span>
@@ -146,19 +142,19 @@ export const WatchQueuePanel: React.FC = () => {
       )}
 
       {/* Queue List Area */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-2.5">
+      <div className="flex-1 overflow-y-auto p-3 space-y-2.5 bg-slate-50/30">
         {queue.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center p-6 text-text-dim">
-            <ListVideo className="w-8 h-8 mb-2 opacity-40 text-accent-secondary" />
-            <p className="text-xs font-semibold text-white">Queue is Empty</p>
+            <ListVideo className="w-8 h-8 mb-2 opacity-40 text-accent-primary" />
+            <p className="text-xs font-semibold text-text-main">Queue is Empty</p>
             <p className="text-[11px] text-text-muted mt-0.5">
               Add upcoming videos so they autoplay when the current video finishes!
             </p>
             <button
               onClick={() => setIsAddOpen(true)}
-              className="mt-3 px-3 py-1.5 rounded-xl bg-background-elevated hover:bg-background-hover border border-surface-border text-xs text-white flex items-center gap-1.5 transition-colors"
+              className="mt-3 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 border border-surface-border text-xs text-text-main font-medium flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer"
             >
-              <Plus className="w-3.5 h-3.5 text-accent-secondary" />
+              <Plus className="w-3.5 h-3.5 text-accent-primary" />
               <span>Add Next Video</span>
             </button>
           </div>
@@ -170,17 +166,17 @@ export const WatchQueuePanel: React.FC = () => {
             return (
               <div
                 key={item.id}
-                className="group relative p-2.5 rounded-xl bg-background-secondary/60 border border-surface-border hover:border-surface-border/80 transition-all flex items-center justify-between gap-2.5"
+                className="group relative p-2.5 rounded-xl bg-white border border-surface-border hover:border-accent-primary/40 shadow-xs transition-all flex items-center justify-between gap-2.5"
               >
                 {/* Left: Thumbnail & Details */}
                 <div className="flex items-center gap-2.5 truncate flex-1">
-                  <div className="w-7 h-7 rounded-lg bg-background-card border border-surface-border flex items-center justify-center flex-shrink-0 text-accent-secondary">
+                  <div className="w-7 h-7 rounded-lg bg-accent-light border border-accent-primary/20 flex items-center justify-center flex-shrink-0 text-accent-primary">
                     <Icon className="w-3.5 h-3.5" />
                   </div>
                   <div className="truncate">
-                    <div className="text-xs font-semibold text-white truncate">{item.title}</div>
-                    <div className="text-[10px] text-text-dim truncate">
-                      Added by <span className="text-accent-secondary">{item.addedBy}</span>
+                    <div className="text-xs font-bold text-text-main truncate">{item.title}</div>
+                    <div className="text-[10px] text-text-muted truncate">
+                      Added by <span className="text-accent-secondary font-semibold">{item.addedBy}</span>
                     </div>
                   </div>
                 </div>
@@ -194,7 +190,7 @@ export const WatchQueuePanel: React.FC = () => {
                         disabled={index === 0}
                         onClick={() => handleMove(index, 'up')}
                         title="Move Up"
-                        className="p-1 rounded text-text-dim hover:text-white disabled:opacity-20"
+                        className="p-1 rounded text-text-dim hover:text-text-main disabled:opacity-20 cursor-pointer"
                       >
                         <ArrowUp className="w-3 h-3" />
                       </button>
@@ -202,7 +198,7 @@ export const WatchQueuePanel: React.FC = () => {
                         disabled={index === queue.length - 1}
                         onClick={() => handleMove(index, 'down')}
                         title="Move Down"
-                        className="p-1 rounded text-text-dim hover:text-white disabled:opacity-20"
+                        className="p-1 rounded text-text-dim hover:text-text-main disabled:opacity-20 cursor-pointer"
                       >
                         <ArrowDown className="w-3 h-3" />
                       </button>
@@ -214,7 +210,7 @@ export const WatchQueuePanel: React.FC = () => {
                     <button
                       onClick={() => handlePlayItem(item.id)}
                       title="Play Now"
-                      className="p-1.5 rounded-lg bg-accent-primary/20 hover:bg-accent-primary text-accent-secondary hover:text-white transition-colors"
+                      className="p-1.5 rounded-lg bg-accent-light hover:bg-accent-primary text-accent-secondary hover:text-white transition-colors cursor-pointer"
                     >
                       <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
                     </button>
@@ -225,7 +221,7 @@ export const WatchQueuePanel: React.FC = () => {
                     <button
                       onClick={() => handleRemoveItem(item.id)}
                       title="Remove from Queue"
-                      className="p-1.5 rounded-lg text-text-dim hover:text-status-error hover:bg-status-error/10 transition-colors"
+                      className="p-1.5 rounded-lg text-text-dim hover:text-status-error hover:bg-status-error/10 transition-colors cursor-pointer"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>

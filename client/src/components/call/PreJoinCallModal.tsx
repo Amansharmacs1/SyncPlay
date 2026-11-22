@@ -181,7 +181,7 @@ export const PreJoinCallModal: React.FC = () => {
               className={`p-2 rounded-xl text-xs flex items-center gap-1.5 backdrop-blur-md border ${
                 cameraEnabled
                   ? 'bg-black/60 border-white/10 text-white'
-                  : 'bg-background-card/90 border-surface-border text-text-dim'
+                  : 'bg-black/60 border-white/10 text-slate-400'
               }`}
             >
               {cameraEnabled ? <Video className="w-3.5 h-3.5" /> : <VideoOff className="w-3.5 h-3.5" />}
@@ -239,14 +239,14 @@ export const PreJoinCallModal: React.FC = () => {
             type="button"
             disabled={isJoining}
             onClick={() => handleJoin('mic-only')}
-            className="w-full p-3.5 rounded-xl text-left flex items-center justify-between bg-background-elevated hover:bg-background-hover border border-surface-border text-white transition-colors disabled:opacity-50"
+            className="w-full p-3.5 rounded-xl text-left flex items-center justify-between bg-slate-50 hover:bg-slate-100 border border-surface-border text-text-main transition-colors disabled:opacity-50"
           >
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center flex-shrink-0 text-accent-secondary">
-                <Mic className="w-4 h-4" />
+              <div className="w-9 h-9 rounded-lg bg-accent-light border border-accent-primary/20 flex items-center justify-center flex-shrink-0 text-accent-secondary">
+                <Mic className="w-4 h-4 text-accent-primary" />
               </div>
               <div>
-                <div className="text-xs font-bold">Join with Microphone Only</div>
+                <div className="text-xs font-bold text-text-main">Join with Microphone Only</div>
                 <div className="text-[11px] text-text-muted">Voice chat without webcam video</div>
               </div>
             </div>
@@ -257,15 +257,15 @@ export const PreJoinCallModal: React.FC = () => {
             type="button"
             disabled={isJoining}
             onClick={() => handleJoin('no-media')}
-            className="w-full p-3.5 rounded-xl text-left flex items-center justify-between bg-background-elevated hover:bg-background-hover border border-surface-border text-text-muted hover:text-white transition-colors disabled:opacity-50"
+            className="w-full p-3.5 rounded-xl text-left flex items-center justify-between bg-slate-50 hover:bg-slate-100 border border-surface-border text-text-muted hover:text-text-main transition-colors disabled:opacity-50"
           >
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-background-card border border-surface-border flex items-center justify-center flex-shrink-0 text-text-dim">
+              <div className="w-9 h-9 rounded-lg bg-white border border-surface-border flex items-center justify-center flex-shrink-0 text-text-muted">
                 <Headphones className="w-4 h-4" />
               </div>
               <div>
-                <div className="text-xs font-bold text-white">Join Without Audio or Video</div>
-                <div className="text-[11px] text-text-dim">Listen-only mode (you can still unmute anytime)</div>
+                <div className="text-xs font-bold text-text-main">Join Without Audio or Video</div>
+                <div className="text-[11px] text-text-muted">Listen-only mode (you can still unmute anytime)</div>
               </div>
             </div>
           </button>

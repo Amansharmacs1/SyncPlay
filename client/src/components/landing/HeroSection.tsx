@@ -18,19 +18,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       <div className="max-w-5xl mx-auto text-center relative z-10">
         {/* Release / Status badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-surface-border bg-background-card/80 text-xs font-medium text-accent-secondary mb-8 shadow-sm">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-surface-border bg-white text-xs font-semibold text-accent-secondary mb-8 shadow-sm">
           <Sparkles className="w-3.5 h-3.5 text-accent-primary animate-pulse" />
           <span>SyncPlay • Instant Social Watch Parties • Zero Login Required</span>
         </div>
 
         {/* Main Headline */}
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6">
+        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-text-main mb-6">
           Your people. Your screen. <br />
           <span className="text-gradient">One shared moment.</span>
         </h1>
 
         {/* Supporting Text */}
-        <p className="text-lg sm:text-xl text-text-muted max-w-2xl mx-auto mb-10 leading-relaxed">
+        <p className="text-lg sm:text-xl text-text-muted max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
           Watch videos together, talk face-to-face, and share every moment — no matter where everyone is.
         </p>
 
@@ -47,7 +47,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
           <button
             onClick={onJoinRoomClick}
-            className="w-full sm:w-auto px-8 py-4 rounded-xl text-text-main font-semibold text-base border border-surface-border bg-background-card/80 hover:bg-background-elevated hover:border-text-dim transition-all flex items-center justify-center gap-2.5 cursor-pointer"
+            className="w-full sm:w-auto px-8 py-4 rounded-xl text-text-main font-semibold text-base border border-surface-border bg-white hover:bg-background-secondary hover:border-slate-300 shadow-sm transition-all flex items-center justify-center gap-2.5 cursor-pointer"
           >
             <LogIn className="w-5 h-5 text-text-muted" />
             <span>Join a Room</span>

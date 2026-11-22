@@ -63,10 +63,10 @@ export const ParticipantTile: React.FC<ParticipantTileProps> = ({
 
   return (
     <div
-      className={`relative rounded-2xl overflow-hidden bg-background-card border transition-all duration-300 group flex items-center justify-center select-none ${
+      className={`relative rounded-2xl overflow-hidden bg-slate-900 border transition-all duration-300 group flex items-center justify-center select-none ${
         isSpeaking
-          ? 'ring-2 ring-accent-primary border-accent-secondary shadow-glow'
-          : 'border-surface-border'
+          ? 'ring-2 ring-accent-primary border-accent-primary shadow-glow'
+          : 'border-surface-border shadow-sm'
       } ${className}`}
     >
       {/* Remote audio playback element (hidden, unmuted) */}
@@ -85,7 +85,7 @@ export const ParticipantTile: React.FC<ParticipantTileProps> = ({
         /* Camera Off Fallback: Generated Initials Avatar */
         <div className="flex flex-col items-center justify-center p-4">
           <Avatar name={participant.name} size={isFocused ? 'lg' : 'md'} className="mb-2" />
-          <span className="text-xs text-text-dim flex items-center gap-1 font-medium">
+          <span className="text-xs text-slate-400 flex items-center gap-1 font-medium">
             <VideoOff className="w-3 h-3" /> Camera off
           </span>
         </div>

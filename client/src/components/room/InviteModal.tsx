@@ -61,7 +61,7 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
         {/* Copy Invite Link */}
         <div>
           <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-1.5 flex items-center gap-1.5">
-            <Link2 className="w-3.5 h-3.5 text-accent-secondary" />
+            <Link2 className="w-3.5 h-3.5 text-accent-primary" />
             <span>Shareable Room Link</span>
           </label>
           <div className="flex items-center gap-2">
@@ -69,11 +69,11 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
               type="text"
               readOnly
               value={inviteUrl}
-              className="flex-1 bg-background-primary border border-surface-border rounded-xl px-3.5 py-2 text-xs font-mono text-white select-all focus:outline-none"
+              className="flex-1 bg-slate-50 border border-surface-border rounded-xl px-3.5 py-2 text-xs font-mono text-text-main select-all focus:outline-none"
             />
             <button
               onClick={handleCopyLink}
-              className="accent-gradient-btn px-4 py-2 rounded-xl text-xs font-semibold text-white shadow-glow flex items-center gap-1.5 flex-shrink-0"
+              className="accent-gradient-btn px-4 py-2 rounded-xl text-xs font-semibold text-white shadow-glow flex items-center gap-1.5 flex-shrink-0 cursor-pointer"
             >
               {copiedLink ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copiedLink ? 'Copied' : 'Copy Link'}</span>
@@ -84,16 +84,16 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
         {/* Copy Room Code */}
         <div>
           <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-1.5 flex items-center gap-1.5">
-            <Hash className="w-3.5 h-3.5 text-accent-secondary" />
+            <Hash className="w-3.5 h-3.5 text-accent-primary" />
             <span>Room Code</span>
           </label>
           <div className="flex items-center gap-2">
-            <div className="flex-1 bg-background-primary border border-surface-border rounded-xl px-3.5 py-2 text-base font-mono font-bold tracking-widest text-accent-secondary">
+            <div className="flex-1 bg-slate-50 border border-surface-border rounded-xl px-3.5 py-2 text-base font-mono font-bold tracking-widest text-accent-secondary">
               {room.roomId}
             </div>
             <button
               onClick={handleCopyCode}
-              className="px-4 py-2 rounded-xl bg-background-elevated hover:bg-background-hover border border-surface-border text-white text-xs font-medium flex items-center gap-1.5 flex-shrink-0 transition-colors"
+              className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-surface-border text-text-main text-xs font-semibold flex items-center gap-1.5 flex-shrink-0 transition-colors cursor-pointer"
             >
               {copiedCode ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copiedCode ? 'Copied' : 'Copy Code'}</span>
@@ -105,16 +105,16 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
         <div>
           <button
             onClick={handleNativeShare}
-            className="w-full py-2.5 px-4 rounded-xl bg-background-elevated hover:bg-background-hover border border-surface-border text-white text-xs font-semibold flex items-center justify-center gap-2 transition-colors"
+            className="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 border border-surface-border text-text-main text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer"
           >
-            <Share2 className="w-4 h-4 text-accent-secondary" />
+            <Share2 className="w-4 h-4 text-accent-primary" />
             <span>Share via Mobile / Messaging Apps</span>
           </button>
         </div>
 
         {room.hasPassword && (
-          <div className="flex items-center gap-2 p-3 rounded-xl bg-accent-primary/10 border border-accent-primary/20 text-xs text-accent-secondary">
-            <Shield className="w-4 h-4 flex-shrink-0" />
+          <div className="flex items-center gap-2 p-3 rounded-xl bg-accent-light border border-accent-primary/20 text-xs text-accent-secondary">
+            <Shield className="w-4 h-4 flex-shrink-0 text-accent-primary" />
             <span>This room is password-protected. Make sure to share the password too.</span>
           </div>
         )}

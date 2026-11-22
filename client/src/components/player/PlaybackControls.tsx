@@ -62,7 +62,7 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
   };
 
   return (
-    <div className="w-full bg-background-card/95 border border-surface-border rounded-xl p-3 sm:p-4 backdrop-blur-md shadow-card">
+    <div className="w-full bg-white border border-surface-border rounded-2xl p-3 sm:p-4 shadow-card">
       {/* Progress Bar */}
       <div className="relative mb-3 flex items-center group">
         <input
@@ -75,11 +75,11 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
           onChange={handleSliderChange}
           onMouseUp={handleSliderCommit}
           onTouchEnd={handleSliderCommit}
-          className={`w-full h-1.5 bg-background-elevated rounded-lg appearance-none cursor-pointer transition-all ${
+          className={`w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer transition-all ${
             hasControl ? 'accent-accent-primary hover:h-2.5' : 'cursor-not-allowed opacity-80'
           }`}
           style={{
-            background: `linear-gradient(to right, #8B5CF6 ${progressPercent}%, #2A2A3C ${progressPercent}%)`,
+            background: `linear-gradient(to right, #6366F1 ${progressPercent}%, #E2E8F0 ${progressPercent}%)`,
           }}
         />
       </div>
@@ -93,10 +93,10 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
             onClick={onPlayToggle}
             disabled={!hasControl}
             title={hasControl ? (isPlaying ? 'Pause' : 'Play') : 'Playback control locked to host'}
-            className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
+            className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer ${
               hasControl
                 ? 'accent-gradient-btn text-white shadow-glow'
-                : 'bg-background-elevated text-text-dim cursor-not-allowed'
+                : 'bg-slate-100 text-text-dim cursor-not-allowed'
             }`}
           >
             {isPlaying ? (
@@ -110,7 +110,7 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={onMuteToggle}
-              className="p-1 text-text-muted hover:text-white transition-colors"
+              className="p-1 text-text-muted hover:text-text-main transition-colors cursor-pointer"
               title={isMuted ? 'Unmute' : 'Mute'}
             >
               {isMuted || volume === 0 ? (
@@ -126,13 +126,13 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
               step={0.05}
               value={isMuted ? 0 : volume}
               onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
-              className="hidden sm:block w-16 h-1 bg-surface-border rounded-lg appearance-none cursor-pointer accent-accent-primary"
+              className="hidden sm:block w-16 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-accent-primary"
             />
           </div>
 
           {/* Time Display */}
           <div className="text-xs font-mono text-text-muted">
-            <span className="text-white font-medium">{formatTime(displayTime)}</span>
+            <span className="text-text-main font-semibold">{formatTime(displayTime)}</span>
             <span className="mx-1 text-text-dim">/</span>
             <span>{formatTime(duration)}</span>
           </div>
@@ -141,15 +141,15 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
         {/* Right: Sync Status & Fullscreen */}
         <div className="flex items-center gap-3">
           {/* Sync badge */}
-          <div className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-lg bg-background-elevated border border-surface-border">
+          <div className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-xl bg-slate-100 border border-surface-border">
             {isHost ? (
               <>
-                <Radio className="w-3.5 h-3.5 text-accent-secondary animate-pulse" />
+                <Radio className="w-3.5 h-3.5 text-accent-primary animate-pulse" />
                 <span className="text-accent-secondary hidden sm:inline">You are Host</span>
               </>
             ) : allowParticipantControl ? (
               <>
-                <Radio className="w-3.5 h-3.5 text-accent-secondary" />
+                <Radio className="w-3.5 h-3.5 text-accent-primary" />
                 <span className="text-accent-secondary hidden sm:inline">Shared Control</span>
               </>
             ) : (
@@ -163,7 +163,7 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
           {/* Fullscreen Button */}
           <button
             onClick={onFullscreenToggle}
-            className="p-2 rounded-lg text-text-muted hover:text-white hover:bg-background-elevated transition-colors"
+            className="p-2 rounded-xl text-text-muted hover:text-text-main hover:bg-slate-100 transition-colors cursor-pointer"
             title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
           >
             {isFullscreen ? <Minimize className="w-4 h-4" /> : <Maximize className="w-4 h-4" />}

@@ -53,13 +53,13 @@ export const CallToolbar: React.FC<CallToolbarProps> = ({
   // If not currently in call, show a "Join Video Call" action button
   if (!isInCall) {
     return (
-      <div className="w-full bg-background-card/95 border border-surface-border rounded-2xl p-3 backdrop-blur-md shadow-card flex items-center justify-between gap-4">
+      <div className="w-full bg-white border border-surface-border rounded-2xl p-3 shadow-card flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center text-accent-secondary">
-            <PhoneCall className="w-4 h-4" />
+          <div className="w-9 h-9 rounded-xl bg-accent-light border border-accent-primary/20 flex items-center justify-center text-accent-secondary">
+            <PhoneCall className="w-4 h-4 text-accent-primary" />
           </div>
           <div>
-            <div className="text-xs font-bold text-white">Live Voice & Video</div>
+            <div className="text-xs font-bold text-text-main">Live Voice & Video</div>
             <div className="text-[11px] text-text-muted">Talk and watch together with friends</div>
           </div>
         </div>
@@ -77,7 +77,7 @@ export const CallToolbar: React.FC<CallToolbarProps> = ({
   }
 
   return (
-    <div className="w-full bg-background-card/95 border border-surface-border rounded-2xl p-3 sm:p-4 backdrop-blur-md shadow-card flex items-center justify-between gap-2 sm:gap-4 overflow-x-auto">
+    <div className="w-full bg-white border border-surface-border rounded-2xl p-3 sm:p-4 shadow-card flex items-center justify-between gap-2 sm:gap-4 overflow-x-auto">
       {/* Left / Media Controls */}
       <div className="flex items-center gap-2 sm:gap-3">
         {/* Mic Toggle */}
@@ -86,8 +86,8 @@ export const CallToolbar: React.FC<CallToolbarProps> = ({
           title={microphoneEnabled ? 'Mute Microphone' : 'Unmute Microphone'}
           className={`p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all ${
             microphoneEnabled
-              ? 'bg-background-elevated hover:bg-background-hover text-white border border-surface-border'
-              : 'bg-status-error text-white shadow-sm'
+              ? 'bg-slate-100 hover:bg-slate-200 text-text-main border border-surface-border'
+              : 'bg-rose-500 hover:bg-rose-600 text-white shadow-sm'
           }`}
         >
           {microphoneEnabled ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
@@ -102,8 +102,8 @@ export const CallToolbar: React.FC<CallToolbarProps> = ({
           title={cameraEnabled ? 'Turn Off Camera' : 'Turn On Camera'}
           className={`p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all ${
             cameraEnabled
-              ? 'bg-background-elevated hover:bg-background-hover text-white border border-surface-border'
-              : 'bg-background-elevated/70 text-text-dim border border-surface-border'
+              ? 'bg-slate-100 hover:bg-slate-200 text-text-main border border-surface-border'
+              : 'bg-slate-100/70 hover:bg-slate-200/80 text-text-muted border border-surface-border'
           }`}
         >
           {cameraEnabled ? <Video className="w-4 h-4" /> : <VideoOff className="w-4 h-4 text-status-error" />}
@@ -119,7 +119,7 @@ export const CallToolbar: React.FC<CallToolbarProps> = ({
           className={`p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all ${
             isScreenSharing
               ? 'accent-gradient-btn text-white shadow-glow'
-              : 'bg-background-elevated hover:bg-background-hover text-white border border-surface-border'
+              : 'bg-slate-100 hover:bg-slate-200 text-text-main border border-surface-border'
           }`}
         >
           {isScreenSharing ? (
@@ -136,7 +136,7 @@ export const CallToolbar: React.FC<CallToolbarProps> = ({
         <button
           onClick={() => setDeviceSettingsModalOpen(true)}
           title="Audio & Video Settings"
-          className="p-2.5 rounded-xl bg-background-elevated hover:bg-background-hover border border-surface-border text-text-muted hover:text-white transition-colors"
+          className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-surface-border text-text-muted hover:text-text-main transition-colors"
         >
           <Settings className="w-4 h-4" />
         </button>
@@ -151,8 +151,8 @@ export const CallToolbar: React.FC<CallToolbarProps> = ({
             title="Toggle Live Chat"
             className={`p-2.5 rounded-xl border transition-colors ${
               isChatOpen
-                ? 'bg-accent-primary/20 border-accent-primary/40 text-accent-secondary'
-                : 'bg-background-elevated hover:bg-background-hover border-surface-border text-text-muted hover:text-white'
+                ? 'bg-accent-light border-accent-primary/30 text-accent-secondary'
+                : 'bg-slate-100 hover:bg-slate-200 border-surface-border text-text-muted hover:text-text-main'
             }`}
           >
             <MessageSquare className="w-4 h-4" />
@@ -166,8 +166,8 @@ export const CallToolbar: React.FC<CallToolbarProps> = ({
             title="Toggle Participants"
             className={`p-2.5 rounded-xl border transition-colors ${
               isParticipantsOpen
-                ? 'bg-accent-primary/20 border-accent-primary/40 text-accent-secondary'
-                : 'bg-background-elevated hover:bg-background-hover border-surface-border text-text-muted hover:text-white'
+                ? 'bg-accent-light border-accent-primary/30 text-accent-secondary'
+                : 'bg-slate-100 hover:bg-slate-200 border-surface-border text-text-muted hover:text-text-main'
             }`}
           >
             <Users className="w-4 h-4" />
@@ -178,7 +178,7 @@ export const CallToolbar: React.FC<CallToolbarProps> = ({
         <button
           onClick={() => webrtcManager.leaveCall()}
           title="Leave Call (Remain in Room)"
-          className="p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl bg-status-error/20 hover:bg-status-error/30 border border-status-error/40 text-status-error text-xs font-semibold flex items-center gap-1.5 transition-colors"
+          className="p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 text-xs font-semibold flex items-center gap-1.5 transition-colors"
         >
           <PhoneOff className="w-4 h-4" />
           <span className="hidden sm:inline">Leave Call</span>
@@ -189,7 +189,7 @@ export const CallToolbar: React.FC<CallToolbarProps> = ({
           <button
             onClick={handleEndRoom}
             title="End Watch Party Room"
-            className="p-2.5 rounded-xl bg-background-elevated hover:bg-status-error/20 hover:text-status-error border border-surface-border text-text-dim transition-colors"
+            className="p-2.5 rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 border border-surface-border text-text-muted transition-colors"
           >
             <Power className="w-4 h-4" />
           </button>

@@ -86,7 +86,7 @@ export const MediaSelectModal: React.FC<MediaSelectModalProps> = ({ isOpen, onCl
     <Modal isOpen={isOpen} onClose={onClose} title="Change Video" maxWidth="max-w-lg">
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
-          <div className="p-3 text-xs text-status-error bg-status-error/10 border border-status-error/20 rounded-xl">
+          <div className="p-3 text-xs text-status-error bg-rose-50 border border-rose-200 rounded-xl">
             {error}
           </div>
         )}
@@ -95,7 +95,7 @@ export const MediaSelectModal: React.FC<MediaSelectModalProps> = ({ isOpen, onCl
         <div>
           <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-1.5 flex items-center justify-between">
             <span>Video URL</span>
-            <span className="text-[11px] text-accent-secondary normal-case">
+            <span className="text-[11px] text-accent-primary font-semibold normal-case">
               YouTube or .mp4 / .webm
             </span>
           </label>
@@ -108,7 +108,7 @@ export const MediaSelectModal: React.FC<MediaSelectModalProps> = ({ isOpen, onCl
               setUrl(e.target.value);
               setError(null);
             }}
-            className="w-full bg-background-primary border border-surface-border rounded-xl px-4 py-2.5 text-sm text-white placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary"
+            className="w-full bg-slate-50 border border-surface-border rounded-xl px-4 py-2.5 text-sm text-text-main placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary focus:bg-white transition-all"
           />
         </div>
 
@@ -122,14 +122,14 @@ export const MediaSelectModal: React.FC<MediaSelectModalProps> = ({ isOpen, onCl
             placeholder="e.g. Saturday Night Film"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full bg-background-primary border border-surface-border rounded-xl px-4 py-2.5 text-sm text-white placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary"
+            className="w-full bg-slate-50 border border-surface-border rounded-xl px-4 py-2.5 text-sm text-text-main placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary focus:bg-white transition-all"
           />
         </div>
 
         {/* Quick Presets */}
         <div>
           <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-accent-secondary" />
+            <Sparkles className="w-3.5 h-3.5 text-accent-primary" />
             <span>Quick Sample Videos</span>
           </label>
           <div className="space-y-2">
@@ -141,21 +141,21 @@ export const MediaSelectModal: React.FC<MediaSelectModalProps> = ({ isOpen, onCl
                   type="button"
                   key={preset.title}
                   onClick={() => handleSelectPreset(preset)}
-                  className={`w-full text-left p-2.5 rounded-xl border flex items-center justify-between transition-all ${
+                  className={`w-full text-left p-2.5 rounded-xl border flex items-center justify-between transition-all cursor-pointer ${
                     isSelected
-                      ? 'border-accent-primary bg-accent-primary/10 text-white'
-                      : 'border-surface-border bg-background-primary text-text-muted hover:border-text-dim'
+                      ? 'border-accent-primary bg-accent-light text-accent-secondary shadow-xs'
+                      : 'border-surface-border bg-slate-50 text-text-muted hover:border-slate-300'
                   }`}
                 >
                   <div className="flex items-center gap-2.5 truncate">
-                    <Icon className="w-4 h-4 text-accent-secondary flex-shrink-0" />
-                    <span className="text-xs font-medium text-white truncate">{preset.title}</span>
+                    <Icon className="w-4 h-4 text-accent-primary flex-shrink-0" />
+                    <span className="text-xs font-medium text-text-main truncate">{preset.title}</span>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
-                    <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-md bg-background-elevated text-text-muted">
+                    <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-md bg-white border border-surface-border text-text-muted font-semibold">
                       {preset.badge}
                     </span>
-                    {isSelected && <Check className="w-4 h-4 text-accent-secondary" />}
+                    {isSelected && <Check className="w-4 h-4 text-accent-primary" />}
                   </div>
                 </button>
               );
@@ -167,7 +167,7 @@ export const MediaSelectModal: React.FC<MediaSelectModalProps> = ({ isOpen, onCl
         <div className="pt-2">
           <button
             type="submit"
-            className="w-full accent-gradient-btn py-3 px-4 rounded-xl text-sm font-semibold text-white shadow-glow flex items-center justify-center gap-2"
+            className="w-full accent-gradient-btn py-3 px-4 rounded-xl text-sm font-semibold text-white shadow-glow flex items-center justify-center gap-2 cursor-pointer"
           >
             <Film className="w-4 h-4" />
             <span>Load Video for Everyone</span>

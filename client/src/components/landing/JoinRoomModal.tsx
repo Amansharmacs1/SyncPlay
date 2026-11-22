@@ -94,7 +94,7 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
             placeholder="e.g. Jordan"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full bg-background-primary border border-surface-border rounded-xl px-4 py-2.5 text-sm text-white placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary"
+            className="w-full bg-slate-50 border border-surface-border rounded-xl px-4 py-2.5 text-sm text-text-main placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary focus:bg-white transition-all"
           />
         </div>
 
@@ -110,7 +110,7 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
             placeholder="e.g. AB12CD"
             value={roomId}
             onChange={(e) => setRoomId(e.target.value.toUpperCase())}
-            className="w-full uppercase font-mono tracking-wider bg-background-primary border border-surface-border rounded-xl px-4 py-2.5 text-sm text-white placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary"
+            className="w-full uppercase font-mono tracking-wider bg-slate-50 border border-surface-border rounded-xl px-4 py-2.5 text-sm text-text-main placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary focus:bg-white transition-all"
           />
         </div>
 
@@ -128,7 +128,7 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
               placeholder="Enter room password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-background-primary border border-accent-primary/50 rounded-xl px-4 py-2.5 text-sm text-white placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary"
+              className="w-full bg-slate-50 border border-accent-primary/50 rounded-xl px-4 py-2.5 text-sm text-text-main placeholder-text-dim focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary focus:bg-white transition-all"
             />
           </div>
         )}
@@ -138,7 +138,7 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
           <button
             type="submit"
             disabled={loading}
-            className="w-full accent-gradient-btn py-3 px-4 rounded-xl text-sm font-semibold text-white shadow-glow flex items-center justify-center gap-2 disabled:opacity-50"
+            className="w-full accent-gradient-btn py-3 px-4 rounded-xl text-sm font-semibold text-white shadow-glow flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
           >
             {loading ? (
               <>

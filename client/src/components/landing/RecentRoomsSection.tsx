@@ -43,22 +43,22 @@ export const RecentRoomsSection: React.FC = () => {
 
   return (
     <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <div className="bg-background-card/80 border border-surface-border rounded-3xl p-6 sm:p-8 backdrop-blur-md shadow-card">
+      <div className="bg-white border border-surface-border rounded-3xl p-6 sm:p-8 shadow-card">
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-surface-border">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center text-accent-secondary">
+            <div className="w-10 h-10 rounded-xl bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center text-accent-primary">
               <History className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <h3 className="text-lg font-bold text-text-main flex items-center gap-2">
                 <span>Recently Visited Rooms</span>
-                <span className="text-xs font-mono font-normal text-text-muted px-2 py-0.5 rounded-full bg-background-elevated">
+                <span className="text-xs font-mono font-semibold text-accent-secondary px-2 py-0.5 rounded-full bg-accent-light">
                   {recentRooms.length}
                 </span>
               </h3>
               <p className="text-xs text-text-muted flex items-center gap-1.5 mt-0.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-accent-secondary" />
+                <ShieldCheck className="w-3.5 h-3.5 text-accent-primary" />
                 <span>Saved locally in your browser. Absolutely no account required.</span>
               </p>
             </div>
@@ -66,7 +66,7 @@ export const RecentRoomsSection: React.FC = () => {
 
           <button
             onClick={handleClearAll}
-            className="text-xs text-text-dim hover:text-status-error flex items-center gap-1 transition-colors"
+            className="text-xs text-text-dim hover:text-status-error flex items-center gap-1 transition-colors cursor-pointer"
           >
             <Trash2 className="w-3.5 h-3.5" />
             <span>Clear History</span>
@@ -79,11 +79,11 @@ export const RecentRoomsSection: React.FC = () => {
             <div
               key={room.roomId}
               onClick={() => handleRejoin(room.roomId)}
-              className="group bg-background-primary/80 hover:bg-background-elevated border border-surface-border hover:border-accent-primary/50 rounded-2xl p-4 transition-all cursor-pointer relative shadow-sm hover:shadow-glow flex flex-col justify-between"
+              className="group bg-slate-50/80 hover:bg-white border border-surface-border hover:border-accent-primary/40 rounded-2xl p-4 transition-all cursor-pointer relative shadow-sm hover:shadow-card flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-start justify-between gap-2 mb-2">
-                  <h4 className="text-sm font-bold text-white group-hover:text-accent-secondary transition-colors truncate">
+                  <h4 className="text-sm font-bold text-text-main group-hover:text-accent-primary transition-colors truncate">
                     {room.roomName}
                   </h4>
                   <button
@@ -103,18 +103,18 @@ export const RecentRoomsSection: React.FC = () => {
 
                 {room.mediaTitle && (
                   <p className="text-xs text-text-muted flex items-center gap-1.5 truncate mb-4">
-                    <Film className="w-3 h-3 text-accent-secondary flex-shrink-0" />
+                    <Film className="w-3 h-3 text-accent-primary flex-shrink-0" />
                     <span className="truncate">{room.mediaTitle}</span>
                   </p>
                 )}
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-surface-border/50 text-xs">
-                <span className="text-accent-secondary font-medium flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+              <div className="flex items-center justify-between pt-2 border-t border-surface-border text-xs">
+                <span className="text-accent-secondary font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                   <Play className="w-3 h-3 fill-accent-secondary" />
                   <span>Rejoin Party</span>
                 </span>
-                <ArrowRight className="w-3.5 h-3.5 text-text-dim group-hover:text-accent-secondary group-hover:translate-x-1 transition-all" />
+                <ArrowRight className="w-3.5 h-3.5 text-text-dim group-hover:text-accent-primary group-hover:translate-x-1 transition-all" />
               </div>
             </div>
           ))}
