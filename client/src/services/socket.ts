@@ -2,9 +2,8 @@ import { io, Socket } from 'socket.io-client';
 import { useRoomStore } from '../stores/useRoomStore.js';
 import { useToastStore } from '../stores/useToastStore.js';
 import { webrtcManager } from './webrtc/WebRTCManager.js';
+import { SOCKET_URL } from '../config/env.js';
 import { MediaState, PlaybackState, RoomData, Participant, ChatMessage } from '../types/index.js';
-
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
 
 class SocketService {
   private socket: Socket | null = null;

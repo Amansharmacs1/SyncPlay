@@ -12,8 +12,7 @@ import {
 import { useCallStore } from '../../stores/useCallStore.js';
 import { useRoomStore } from '../../stores/useRoomStore.js';
 import { useToastStore } from '../../stores/useToastStore.js';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import { API_BASE } from '../../config/env.js';
 
 export class WebRTCManager {
   private static instance: WebRTCManager | null = null;

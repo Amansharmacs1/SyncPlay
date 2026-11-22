@@ -4,6 +4,7 @@ import { Server } from 'socket.io';
 import { createApp } from './app.js';
 import { connectDatabase } from './config/database.js';
 import { setupSocketIO } from './socket/index.js';
+import { isOriginAllowed } from './config/cors.js';
 import { ClientToServerEvents, ServerToClientEvents } from './types/index.js';
 
 dotenv.config();
@@ -14,9 +15,17 @@ const httpServer = http.createServer(app);
 
 const io = new Server<ClientToServerEvents, ServerToClientEvents>(httpServer, {
   cors: {
-    origin: '*',
+    origin: (origin, callback) => {
+      if (isOriginAllowed(origin)) {
+        callback(null, true);
+      } else {
+        callback(null, false);
+      }
+    },
     methods: ['GET', 'POST'],
+    credentials: true,
   },
+  transports: ['websocket', 'polling'],
   pingTimeout: 20000,
   pingInterval: 10000,
 });
